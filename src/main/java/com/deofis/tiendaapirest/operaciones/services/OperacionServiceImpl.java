@@ -234,6 +234,8 @@ public class OperacionServiceImpl implements OperacionService {
             pagoStrategy = this.pagoStrategyFactory.get(String.valueOf(PagoStrategyName.payPalStrategy));
         else if (nuevaOperacion.getMedioPago().getNombre().equals(MedioPagoEnum.EFECTIVO))
             pagoStrategy = this.pagoStrategyFactory.get(String.valueOf(PagoStrategyName.cashStrategy));
+        else if (nuevaOperacion.getMedioPago().getNombre().equals(MedioPagoEnum.MERCADO_PAGO))
+            pagoStrategy = this.pagoStrategyFactory.get(String.valueOf(PagoStrategyName.mercadoPagoStrategy));
         else pagoStrategy = null;
 
         return pagoStrategy != null ? pagoStrategy.crearPago(nuevaOperacion) : null;

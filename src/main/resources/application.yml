@@ -61,6 +61,10 @@ magicbell:
   apiKey: fe895cc2053486135913f5557c5fae1ca049a04e
   apiSecret: c7d010e7def46aec61c8524f85371103a1e48fb0
 
+mercadopago:
+  publicKey: TEST-d0859391-4a9a-47ec-a0c1-74b6d81f7fa3
+  accessKey: TEST-1434091456534127-011920-67ef4409b41a150450c09f1fbac42aae-703836772
+
 jasypt:
   encryptor:
     iv-generator-classname: org.jasypt.iv.NoIvGenerator

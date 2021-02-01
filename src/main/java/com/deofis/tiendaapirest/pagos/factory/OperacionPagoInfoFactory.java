@@ -14,6 +14,8 @@ public class OperacionPagoInfoFactory {
             return new EfectivoPagoInfo(atributos);
         } else if (medioPago.equalsIgnoreCase(String.valueOf(MedioPagoEnum.PAYPAL))) {
             return new PayPalPagoInfo(atributos);
+        } else if (medioPago.equalsIgnoreCase(String.valueOf(MedioPagoEnum.MERCADO_PAGO))) {
+            return new MercadoPagoPagoInfo(atributos);
         } else {
             throw new OperacionException("Medio de pago " + medioPago + " aun" +
                     " no ha sido implementado");
