@@ -16,7 +16,7 @@ import java.util.List;
 @Component
 @AllArgsConstructor
 @Profile({"qa", "qaheroku", "dev"})
-public class DataLoaderProductosCalzado implements CommandLineRunner {
+public class DataLoaderProductos implements CommandLineRunner {
 
     private final UnidadMedidaRepository unidadMedidaRepository;
     private final MarcaRepository marcaRepository;

@@ -5,11 +5,14 @@ import com.deofis.tiendaapirest.perfiles.domain.Carrito;
 public interface CarritoService {
 
     /**
-     * Agrega un Sku de Producto al carrito (cantidad por defecto: 1)
+     * Agrega un Sku de Producto al carrito con una cantidad requerida. En caso de
+     * que el item ya exista, esta cantidad se suma a la anterior; en caso de que no,
+     * se crea el nuevo item con la cantidad seteada.
      * @param skuId Long id del sku a agregar.
+     * @param cantidad Integer cantidad que tendrá el item.
      * @return Carrito actualizado.
      */
-    Carrito agregarItem(Long skuId);
+    Carrito agregarItem(Long skuId, Integer cantidad);
 
     /**
      * Actualizar la cantidad de skus de un carrito.

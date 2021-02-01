@@ -13,15 +13,13 @@ spring:
       ddl-auto: update
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    show-sql: true
   mail:
     host: smtp.mailtrap.io
     port: 2525
     username: eb1eece6b19a9c
     password: ed814f343a2257
 
-logging:
-  level:
-    org.hibernate.SQL: debug
 
 endpoints:
   baseUrl: http://localhost:8080

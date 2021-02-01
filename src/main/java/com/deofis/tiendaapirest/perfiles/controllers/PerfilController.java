@@ -69,13 +69,13 @@ public class PerfilController {
 
     /**
      * Como usuario, quiero actualizar mis datos de cliente en mi perfil.
-     * URL: ~/api/perfil/actualizar-cliente
+     * URL: ~/api/perfil/cliente/actualizar
      * HttpMethod: PUT
      * HttpStatus: CREATED
      * @param cliente Cliente actualizado.
      * @return ResponseEntity Perfil con los datos del cliente actualizados.
      */
-    @PutMapping("/perfil/actualizar-cliente")
+    @PutMapping("/perfil/cliente/actualizar")
     public ResponseEntity<?> actualizarDatos(@Valid @RequestBody Cliente cliente, BindingResult result) {
         Map<String, Object> response = new HashMap<>();
         PerfilDTO perfil;

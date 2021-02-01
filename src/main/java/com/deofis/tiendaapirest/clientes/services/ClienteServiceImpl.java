@@ -42,8 +42,10 @@ public class ClienteServiceImpl implements ClienteService {
 
         clienteActual.setNombre(clienteActualizado.getNombre());
         clienteActual.setApellido(clienteActualizado.getApellido());
+        clienteActual.setDni(clienteActualizado.getDni());
         clienteActual.setTelefono(clienteActualizado.getTelefono());
         clienteActual.setDireccion(clienteActualizado.getDireccion());
+        clienteActual.setFechaNacimiento(clienteActualizado.getFechaNacimiento());
 
         return this.save(clienteActual);
     }

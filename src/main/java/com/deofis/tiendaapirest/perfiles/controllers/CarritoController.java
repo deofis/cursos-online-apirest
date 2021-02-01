@@ -29,15 +29,17 @@ public class CarritoController {
      * HttpMethod: POST
      * HttpStatus: CREATED
      * @param skuId Long id del sku a agregar.
+     * @param cantidad Integer cantidad que tendrá el item.
      * @return ResponseEntity con el carrito actualizado.
      */
     @PostMapping("/carrito/item/agregar")
-    public ResponseEntity<?> agregarItem(@RequestParam Long skuId) {
+    public ResponseEntity<?> agregarItem(@RequestParam Long skuId,
+                                         @RequestParam(required = false, defaultValue = "1") Integer cantidad) {
         Map<String, Object> response = new HashMap<>();
         Carrito carrito;
 
         try {
-            carrito = this.carritoService.agregarItem(skuId);
+            carrito = this.carritoService.agregarItem(skuId, cantidad);
         } catch (PerfilesException | SkuException | ClienteException | AutenticacionException e) {
             response.put("mensaje", "Error al agregar item al carrito");
             response.put("error", e.getMessage());
