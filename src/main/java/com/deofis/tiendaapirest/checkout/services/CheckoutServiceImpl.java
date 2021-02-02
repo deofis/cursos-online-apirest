@@ -1,5 +1,6 @@
 package com.deofis.tiendaapirest.checkout.services;
 
+import com.deofis.tiendaapirest.checkout.dto.CheckoutPayload;
 import com.deofis.tiendaapirest.operaciones.domain.EstadoOperacion;
 import com.deofis.tiendaapirest.operaciones.domain.EventoOperacion;
 import com.deofis.tiendaapirest.operaciones.domain.Operacion;
@@ -33,9 +34,10 @@ public class CheckoutServiceImpl implements CheckoutService {
 
     @Transactional
     @Override
-    public OperacionPagoInfo ejecutarCheckout(Long nroOperacion) {
-        Operacion operacion = this.operacionService.findById(nroOperacion);
-        StateMachine<EstadoOperacion, EventoOperacion> sm = this.stateMachineService.build(nroOperacion);
+    public OperacionPagoInfo ejecutarCheckoutSuccess(CheckoutPayload checkoutPayload) {
+        Operacion operacion = this.operacionService.findById(checkoutPayload.getNroOperacion());
+        StateMachine<EstadoOperacion, EventoOperacion> sm = this.stateMachineService
+                .build(checkoutPayload.getNroOperacion());
 
         // Si el pago ya fue efectuado, tiramos excepción
         if (operacion.getPago().getStatus().equalsIgnoreCase("completed"))
@@ -46,16 +48,10 @@ public class CheckoutServiceImpl implements CheckoutService {
         Date fechaCreacionPago = operacion.getPago().getFechaCreacion();
 
         // Delegamos el completar pago al strategy correspondiente
-        PagoStrategy pagoStrategy;
-        MedioPagoEnum medioPagoNombre = operacion.getMedioPago().getNombre();
+        PagoStrategy pagoStrategy = this.getPagoStrategy(operacion.getMedioPago().getNombre());
 
-        if (medioPagoNombre.equals(MedioPagoEnum.EFECTIVO))
-            pagoStrategy = this.pagoStrategyFactory.get(String.valueOf(PagoStrategyName.cashStrategy));
-        else if (medioPagoNombre.equals(MedioPagoEnum.PAYPAL))
-            pagoStrategy = this.pagoStrategyFactory.get(String.valueOf(PagoStrategyName.payPalStrategy));
-        else pagoStrategy = null;
-
-        OperacionPagoInfo pagoInfo = pagoStrategy != null ? pagoStrategy.completarPago(operacion) : null;
+        OperacionPagoInfo pagoInfo = pagoStrategy != null ? pagoStrategy
+                .completarPago(operacion, checkoutPayload.getPaymentId()) : null;
         operacion.setPago(this.operacionPagoMapping.mapToOperacionPago(pagoInfo));
 
         // Seteamos la fecha de creación guardada para no perder referencia
@@ -64,10 +60,27 @@ public class CheckoutServiceImpl implements CheckoutService {
         operacion.getPago().setFechaPagado(new Date());
 
         // Enviamos el EVENTO para transicionar de ESTADO la operación
-        this.stateMachineService.enviarEvento(nroOperacion, sm, EventoOperacion.COMPLETE_PAYMENT);
+        this.stateMachineService.enviarEvento(checkoutPayload.getNroOperacion(), sm, EventoOperacion.COMPLETE_PAYMENT);
 
         // Por último, guardamos la operación actualizada y devolvemos el objeto con la info del pago (DTO).
         this.operacionService.save(operacion);
         return pagoInfo;
+    }
+
+    private PagoStrategy getPagoStrategy(MedioPagoEnum medioPagoNombre) {
+        PagoStrategy pagoStrategy;
+
+        if (medioPagoNombre.equals(MedioPagoEnum.EFECTIVO))
+            pagoStrategy = this.pagoStrategyFactory.get(String.valueOf(PagoStrategyName.cashStrategy));
+        else if (medioPagoNombre.equals(MedioPagoEnum.PAYPAL))
+            pagoStrategy = this.pagoStrategyFactory.get(String.valueOf(PagoStrategyName.payPalStrategy));
+        else pagoStrategy = null;
+
+        return pagoStrategy;
+    }
+
+    @Override
+    public void ejecutarCheckoutFailure() {
+        System.out.println("Por implementar...");
     }
 }

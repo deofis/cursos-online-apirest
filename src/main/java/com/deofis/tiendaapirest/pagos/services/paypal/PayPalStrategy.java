@@ -79,9 +79,7 @@ public class PayPalStrategy implements PagoStrategy {
     }
 
     @Override
-    public OperacionPagoInfo completarPago(Operacion operacion) {
-        String orderId = operacion.getPago().getId();
-
+    public OperacionPagoInfo completarPago(Operacion operacion, String orderId) {
         OrderRequest orderRequest = new OrderRequest();
         OrdersCaptureRequest request = new OrdersCaptureRequest(orderId);
         request.requestBody(orderRequest);

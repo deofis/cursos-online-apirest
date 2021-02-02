@@ -49,7 +49,7 @@ public class RegistrarOperacionController {
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        response.put("compra", pagoInfo);
+        response.put("pago", pagoInfo);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 

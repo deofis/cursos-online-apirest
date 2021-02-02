@@ -33,7 +33,7 @@ public class CashStrategy implements PagoStrategy {
     }
 
     @Override
-    public OperacionPagoInfo completarPago(Operacion operacion) {
+    public OperacionPagoInfo completarPago(Operacion operacion, String pagoId) {
         Map<String, Object> atributosPago = new HashMap<>();
 
         PayerPayload payer = PayerPayload.builder()

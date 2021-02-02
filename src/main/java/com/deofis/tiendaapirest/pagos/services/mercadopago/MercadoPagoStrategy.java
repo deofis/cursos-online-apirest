@@ -54,7 +54,7 @@ public class MercadoPagoStrategy implements PagoStrategy {
     }
 
     @Override
-    public OperacionPagoInfo completarPago(Operacion operacion) {
+    public OperacionPagoInfo completarPago(Operacion operacion, String paymentId) {
         return null;
     }
 
