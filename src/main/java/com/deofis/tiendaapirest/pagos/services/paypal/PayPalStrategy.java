@@ -174,15 +174,9 @@ public class PayPalStrategy implements PagoStrategy {
 
         for (DetalleOperacion item: operacion.getItems()) {
             Sku sku = item.getSku();
-            String descripcion = sku.getDescripcion();
 
-            if (descripcion.length() > 100)
-                descripcion = descripcion.substring(0, 100).replace("\n", "");
-
-            log.info(descripcion);
             items.add(new Item()
                     .name(sku.getNombre())
-                    .description(descripcion)
                     .unitAmount(new Money().currencyCode(CURRENCY).value(String.valueOf(item.getPrecioVenta())))
                     .quantity(String.valueOf(item.getCantidad()))
                     .category("PHYSICAL_GOODS"));
