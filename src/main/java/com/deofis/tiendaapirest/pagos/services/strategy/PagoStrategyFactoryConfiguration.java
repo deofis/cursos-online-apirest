@@ -1,6 +1,5 @@
-package com.deofis.tiendaapirest.config;
+package com.deofis.tiendaapirest.pagos.services.strategy;
 
-import com.deofis.tiendaapirest.pagos.services.strategy.PagoStrategyFactory;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.config.ServiceLocatorFactoryBean;
@@ -9,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @AllArgsConstructor
-public class AppConfiguration {
+public class PagoStrategyFactoryConfiguration {
 
     private final BeanFactory beanFactory;
 
