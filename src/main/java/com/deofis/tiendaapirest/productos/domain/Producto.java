@@ -79,7 +79,7 @@ public class Producto implements Serializable {
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private UnidadMedida unidadMedida;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.REFRESH, CascadeType.MERGE})
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "productos_x_propiedades",
             joinColumns = @JoinColumn(name = "producto_id"),
             inverseJoinColumns = @JoinColumn(name = "producto_propiedad_id"),
