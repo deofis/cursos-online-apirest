@@ -393,4 +393,17 @@ public class CategoriasController {
         respose.put("mensaje", msg);
         return new ResponseEntity<>(respose, HttpStatus.OK);
     }
+
+    /**
+     * API que obtiene la {@link Categoria} a la que pertenece una {@link Subcategoria}.
+     * URL: ~/api/categorias/por-subcategoria/1
+     * HttpMethod: GET
+     * HttpStatus: OK
+     * @param subcategoriaId Long id de la subcategoría a obtener la categoría a la que pertenece.
+     * @return ResponseEntity con la {@link Categoria} encontrada.
+     */
+    @GetMapping("/categorias/por-subcategoria/{subcategoriaId}")
+    public ResponseEntity<?> encontrarCategoriaPorSubcategoria(@PathVariable Long subcategoriaId) {
+        return null;
+    }
 }

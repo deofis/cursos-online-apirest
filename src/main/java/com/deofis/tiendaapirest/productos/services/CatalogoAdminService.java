@@ -216,4 +216,11 @@ public interface CatalogoAdminService {
      * @return List listado de los valores de la propiedad.
      */
     List<ValorPropiedadProducto> obtenerValoresDePropiedad(Long propiedadId);
+
+    /**
+     * Devuelve la categoría a la que pertenece una subcategoría requerida a través de su id.
+     * @param subcategoriaId Long id de la subcategoría.
+     * @return {@link Categoria} a la que pertenece la subcategoría.
+     */
+    Categoria obtenerCategoriaPorSubcategoria(Long subcategoriaId);
 }
