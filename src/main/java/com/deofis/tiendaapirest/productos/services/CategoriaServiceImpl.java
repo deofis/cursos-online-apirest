@@ -129,4 +129,9 @@ public class CategoriaServiceImpl implements CategoriaService {
         this.categoriaRepository.save(categoria);
         this.imageService.eliminarImagen(fotoCategoria);
     }
+
+    @Override
+    public Categoria obtenerCategoriaPorSubcategoria(Subcategoria subcategoria) {
+        return null;
+    }
 }
