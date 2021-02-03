@@ -40,7 +40,8 @@ public class CheckoutServiceImpl implements CheckoutService {
                 .build(checkoutPayload.getNroOperacion());
 
         // Si el pago ya fue efectuado, tiramos excepción
-        if (operacion.getPago().getStatus().equalsIgnoreCase("completed"))
+        if (operacion.getPago().getStatus().equalsIgnoreCase("completed") ||
+                operacion.getPago().getStatus().equalsIgnoreCase("approved"))
             throw new PaymentException("El pago para esta operación ya fue completado");
 
         // Obtenemos esta fecha para asignarsela luego de completar el pago, para
@@ -49,9 +50,8 @@ public class CheckoutServiceImpl implements CheckoutService {
 
         // Delegamos el completar pago al strategy correspondiente
         PagoStrategy pagoStrategy = this.getPagoStrategy(operacion.getMedioPago().getNombre());
-
         OperacionPagoInfo pagoInfo = pagoStrategy != null ? pagoStrategy
-                .completarPago(operacion, checkoutPayload.getPaymentId()) : null;
+                .completarPago(operacion, checkoutPayload.getPaymentId(), checkoutPayload.getPreferenceId()) : null;
         operacion.setPago(this.operacionPagoMapping.mapToOperacionPago(pagoInfo));
 
         // Seteamos la fecha de creación guardada para no perder referencia
@@ -74,6 +74,8 @@ public class CheckoutServiceImpl implements CheckoutService {
             pagoStrategy = this.pagoStrategyFactory.get(String.valueOf(PagoStrategyName.cashStrategy));
         else if (medioPagoNombre.equals(MedioPagoEnum.PAYPAL))
             pagoStrategy = this.pagoStrategyFactory.get(String.valueOf(PagoStrategyName.payPalStrategy));
+        else if (medioPagoNombre.equals(MedioPagoEnum.MERCADO_PAGO))
+            pagoStrategy = this.pagoStrategyFactory.get(String.valueOf(PagoStrategyName.mercadoPagoStrategy));
         else pagoStrategy = null;
 
         return pagoStrategy;

@@ -3,10 +3,13 @@ package com.deofis.tiendaapirest.pagos.services.mercadopago;
 import com.deofis.tiendaapirest.operaciones.domain.DetalleOperacion;
 import com.deofis.tiendaapirest.operaciones.domain.Operacion;
 import com.deofis.tiendaapirest.pagos.PaymentException;
+import com.deofis.tiendaapirest.pagos.dto.AmountPayload;
+import com.deofis.tiendaapirest.pagos.dto.PayerPayload;
 import com.deofis.tiendaapirest.pagos.factory.OperacionPagoInfo;
 import com.deofis.tiendaapirest.pagos.factory.OperacionPagoInfoFactory;
 import com.deofis.tiendaapirest.pagos.services.strategy.PagoStrategy;
 import com.mercadopago.exceptions.MPException;
+import com.mercadopago.resources.Payment;
 import com.mercadopago.resources.Preference;
 import com.mercadopago.resources.datastructures.preference.BackUrls;
 import com.mercadopago.resources.datastructures.preference.Item;
@@ -54,8 +57,56 @@ public class MercadoPagoStrategy implements PagoStrategy {
     }
 
     @Override
-    public OperacionPagoInfo completarPago(Operacion operacion, String paymentId) {
-        return null;
+    public OperacionPagoInfo completarPago(Operacion operacion, String paymentId, String preferenceId) {
+        Map<String, Object> atributosPago = new HashMap<>();
+        Payment payment;
+
+        try {
+            payment = Payment.findById(paymentId);
+        } catch (MPException e) {
+            throw new PaymentException("Error al completar el pago con Mercado Pago: " +
+                    e.getMessage());
+        }
+
+        if (payment.getStatus() == null) {
+            throw new PaymentException("Error al completar el pago con Mercado Pago: " +
+                    "No se encontró el pago con el id: " + paymentId);
+        }
+
+        if (preferenceId == null)
+            throw new PaymentException("La preference_id es necesaria para hacer la validación del pago");
+
+        // Si el payment pasado tiene distinto preferenceId del Pago creado al momento
+        // de crear el pago para la operación, tiramos excepción
+        if (!operacion.getPago().getId().equals(preferenceId)) {
+            log.info("pago.preference_id --> " + operacion.getPago().getId());
+            log.info("preference_id --> " + preferenceId);
+            throw new PaymentException("El ID del pago solicitado no esta asociado al pago de la operación");
+        }
+
+        PayerPayload payer = PayerPayload.builder()
+                .payerId(payment.getPayer().getId())
+                .payerEmail(payment.getPayer().getEmail())
+                .payerFullName(payment.getPayer().getLastName().concat(" ")
+                        .concat(payment.getPayer().getFirstName())).build();
+
+        AmountPayload amount = AmountPayload.builder()
+                .totalBruto(String.valueOf(payment.getTransactionDetails().getTotalPaidAmount()))
+                .totalNeto(String.valueOf(payment.getTransactionDetails().getNetReceivedAmount()))
+                .fee(String.valueOf(payment.getFeeDetails().get(0).getAmount())).build();
+
+        atributosPago.put("preferenceId", operacion.getPago().getId());
+        atributosPago.put("nroOperacion", operacion.getNroOperacion());
+        atributosPago.put("status", String.valueOf(payment.getStatus()));
+        atributosPago.put("payer", payer);
+        atributosPago.put("amount", amount);
+
+        log.info("payer --> " + payer.toString());
+        log.info("amount -->" + amount.toString());
+
+        log.info("Pago completado con éxito");
+        return OperacionPagoInfoFactory
+                .getOperacionPagoInfo(String.valueOf(operacion.getMedioPago().getNombre()), atributosPago);
     }
 
     private Preference buildPreferenceBody(Operacion operacion) {

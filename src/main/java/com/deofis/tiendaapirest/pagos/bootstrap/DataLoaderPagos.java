@@ -33,7 +33,7 @@ public class DataLoaderPagos implements CommandLineRunner {
             mediosPago.add(paypal);
 
             MedioPago mercadoPago = new MedioPago();
-            paypal.setNombre(MedioPagoEnum.MERCADO_PAGO);
+            mercadoPago.setNombre(MedioPagoEnum.MERCADO_PAGO);
             mediosPago.add(mercadoPago);
 
             this.medioPagoRepository.saveAll(mediosPago);

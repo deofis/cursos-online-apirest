@@ -12,4 +12,5 @@ import lombok.NoArgsConstructor;
 public class CheckoutPayload {
     private Long nroOperacion;
     private String paymentId;
+    private String preferenceId;
 }

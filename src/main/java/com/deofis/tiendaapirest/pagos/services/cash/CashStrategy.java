@@ -33,7 +33,7 @@ public class CashStrategy implements PagoStrategy {
     }
 
     @Override
-    public OperacionPagoInfo completarPago(Operacion operacion, String pagoId) {
+    public OperacionPagoInfo completarPago(Operacion operacion, String pagoId, String preferenceId) {
         Map<String, Object> atributosPago = new HashMap<>();
 
         PayerPayload payer = PayerPayload.builder()
@@ -54,6 +54,7 @@ public class CashStrategy implements PagoStrategy {
         atributosPago.put("monto", amount);
         atributosPago.put("pagador", payer);
 
+        log.info(preferenceId, pagoId);
         return OperacionPagoInfoFactory
                 .getOperacionPagoInfo(String.valueOf(operacion.getMedioPago().getNombre()), atributosPago);
     }

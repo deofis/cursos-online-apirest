@@ -79,43 +79,44 @@ public class PayPalStrategy implements PagoStrategy {
     }
 
     @Override
-    public OperacionPagoInfo completarPago(Operacion operacion, String orderId) {
+    public OperacionPagoInfo completarPago(Operacion operacion, String orderId, String preferenceId) {
         OrderRequest orderRequest = new OrderRequest();
         OrdersCaptureRequest request = new OrdersCaptureRequest(orderId);
         request.requestBody(orderRequest);
 
         // Creamos mapa de atributos para nuestra clase de pago.
         Map<String, Object> atributosPago = new HashMap<>();
+        Order order;
         try {
             HttpResponse<Order> response = this.client.execute(request);
-            Order order = response.result();
-
-            PayerPayload payer = PayerPayload.builder()
-                    .payerId(order.payer().payerId())
-                    .payerEmail(order.payer().email())
-                    .payerFullName(order.payer().name().givenName().concat(" ").concat(order.payer().name().surname()))
-                    .build();
-
-            AmountPayload amount = AmountPayload.builder()
-                    .totalBruto(order.purchaseUnits().get(0).payments().captures().get(0)
-                            .sellerReceivableBreakdown().grossAmount().value())
-                    .totalNeto(order.purchaseUnits().get(0).payments().captures().get(0)
-                            .sellerReceivableBreakdown().netAmount().value())
-                    .fee(order.purchaseUnits().get(0).payments().captures().get(0)
-                            .sellerReceivableBreakdown().paypalFee().value())
-                    .build();
-
-            // Completamos los datos de los atributos para nuestro pago
-
-            atributosPago.put("orderId", order.id());
-            atributosPago.put("nroOperacion", operacion.getNroOperacion());
-            atributosPago.put("status", order.status());
-            atributosPago.put("amount", amount);
-            atributosPago.put("payer", payer);
+            order = response.result();
         } catch (IOException e) {
-            throw new PaymentException("Error al completar el pago con paypal: " +
+            throw new PaymentException("Error al completar el pago con PayPal: " +
                     e.getMessage());
         }
+
+        PayerPayload payer = PayerPayload.builder()
+                .payerId(order.payer().payerId())
+                .payerEmail(order.payer().email())
+                .payerFullName(order.payer().name().givenName().concat(" ").concat(order.payer().name().surname()))
+                .build();
+
+        AmountPayload amount = AmountPayload.builder()
+                .totalBruto(order.purchaseUnits().get(0).payments().captures().get(0)
+                        .sellerReceivableBreakdown().grossAmount().value())
+                .totalNeto(order.purchaseUnits().get(0).payments().captures().get(0)
+                        .sellerReceivableBreakdown().netAmount().value())
+                .fee(order.purchaseUnits().get(0).payments().captures().get(0)
+                        .sellerReceivableBreakdown().paypalFee().value())
+                .build();
+
+        // Completamos los datos de los atributos para nuestro pago
+
+        atributosPago.put("orderId", order.id());
+        atributosPago.put("nroOperacion", operacion.getNroOperacion());
+        atributosPago.put("status", order.status());
+        atributosPago.put("payer", payer);
+        atributosPago.put("amount", amount);
 
         log.info("Pago completado con éxito");
         return OperacionPagoInfoFactory
