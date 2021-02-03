@@ -276,11 +276,6 @@ public class CatalogoAdminServiceImpl implements CatalogoAdminService {
         return this.propiedadProductoService.obtenerValoresDePropiedad(propiedadId);
     }
 
-    @Override
-    public Categoria obtenerCategoriaPorSubcategoria(Long subcategoriaId) {
-        return null;
-    }
-
     private boolean validarPropiedad(Subcategoria subcategoria, PropiedadProducto propiedad) {
         return !subcategoria.getPropiedades().contains(propiedad);
     }

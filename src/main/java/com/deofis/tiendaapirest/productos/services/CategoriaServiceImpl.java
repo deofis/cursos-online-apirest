@@ -5,6 +5,7 @@ import com.deofis.tiendaapirest.productos.domain.Imagen;
 import com.deofis.tiendaapirest.productos.domain.Subcategoria;
 import com.deofis.tiendaapirest.productos.exceptions.CategoriaException;
 import com.deofis.tiendaapirest.productos.repositories.CategoriaRepository;
+import com.deofis.tiendaapirest.productos.repositories.SubcategoriaRepository;
 import com.deofis.tiendaapirest.productos.services.images.ImageService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import java.util.List;
 public class CategoriaServiceImpl implements CategoriaService {
 
     private final CategoriaRepository categoriaRepository;
+    private final SubcategoriaRepository subcategoriaRepository;
     private final ImageService imageService;
 
     @Override
@@ -130,8 +132,10 @@ public class CategoriaServiceImpl implements CategoriaService {
         this.imageService.eliminarImagen(fotoCategoria);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Categoria obtenerCategoriaPorSubcategoria(Subcategoria subcategoria) {
-        return null;
+        return this.categoriaRepository.findBySubcategoriasContaining(subcategoria)
+                .orElseThrow(() -> new CategoriaException("La subcategoría no pertenece a ninguna categoría"));
     }
 }

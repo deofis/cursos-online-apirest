@@ -404,6 +404,23 @@ public class CategoriasController {
      */
     @GetMapping("/categorias/por-subcategoria/{subcategoriaId}")
     public ResponseEntity<?> encontrarCategoriaPorSubcategoria(@PathVariable Long subcategoriaId) {
-        return null;
+        Map<String, Object> response = new HashMap<>();
+        Categoria categoria;
+        Subcategoria subcategoria;
+        String nombreSubcategoria;
+
+        try {
+            subcategoria = this.subcategoriaService.obtenerSubcategoria(subcategoriaId);
+            categoria = this.categoriaService.obtenerCategoriaPorSubcategoria(subcategoria);
+            nombreSubcategoria = subcategoria.getNombre();
+        } catch (CategoriaException e) {
+            response.put("mensaje", "Error al obtener la categoría de la subcategoría");
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        response.put("subcategoria", nombreSubcategoria);
+        response.put("categoria", categoria);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

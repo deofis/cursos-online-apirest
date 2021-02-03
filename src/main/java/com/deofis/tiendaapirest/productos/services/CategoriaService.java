@@ -85,8 +85,7 @@ public interface CategoriaService {
     /**
      * Obtiene una {@link Categoria} a partir de una {@link Subcategoria}, es decir,
      * devuelve la categoría a la que pertenece una subcategoría requerida.
-     * @param subcategoria {@link Subcategoria} requerida a encontrar la categoría a la que
-     *                                         pertenece.
+     * @param subcategoria {@link Subcategoria} requerida a encontrar la categoría a la que pertenece.
      * @return {@link Categoria} a la que pertenece la subcategoría requerida.
      */
     Categoria obtenerCategoriaPorSubcategoria(Subcategoria subcategoria);
