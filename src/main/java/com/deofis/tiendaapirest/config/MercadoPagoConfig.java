@@ -16,6 +16,8 @@ public class MercadoPagoConfig {
 
     @Bean
     void setMercadoPagoAccessToken() throws Exception {
+        if (this.publicKey == null || this.accessKey == null)
+            throw new IllegalAccessException("MercadoPago access and public key must be provided");
         MercadoPago.SDK.setAccessToken(this.accessKey);
     }
 }

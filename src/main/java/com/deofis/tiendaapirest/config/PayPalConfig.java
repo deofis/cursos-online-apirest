@@ -16,12 +16,14 @@ public class PayPalConfig {
     private String clientSecret;
 
     @Bean
-    public PayPalEnvironment payPalEnvironment() {
+    public PayPalEnvironment payPalEnvironment() throws Exception {
+        if (this.clientId == null || this.clientSecret == null)
+            throw new IllegalAccessException("PayPal client id and client secret must be provided");
         return new PayPalEnvironment.Sandbox(clientId, clientSecret);
     }
 
     @Bean
-    public PayPalHttpClient payPalHttpClient() {
+    public PayPalHttpClient payPalHttpClient() throws Exception {
         return new PayPalHttpClient(payPalEnvironment());
     }
 }

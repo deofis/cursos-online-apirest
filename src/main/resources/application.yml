@@ -37,6 +37,7 @@ spring:
     multipart:
       max-file-size: 10MB
       max-request-size: 10MB
+
 server:
   error:
     include-message: always
@@ -50,20 +51,8 @@ app:
       - https://wantfrom-tienda.web.app/oauth2/redirect
       - https://deofisdev.online/oauth2/redirect
 
-paypal:
-  clientId: AULkwIac0isgBpdaemBxUi7VABSAksciHwhnwbJHh-Och2Kf8qAJ0cwFbYrouVgA5Mqo9fHonoyof3EJ
-  clientSecret: EFoADORBnsYEkgM6YNfTU_pfHu0D8Npi2W8ZFASWysDKWnicY0OQX2sYCyCQs8H7RU9w5bnleMcUP5JP
-
 jwt:
   secretKey: ENC(TKNxJDVZ/6OhE46W6xSXrZskdhO7B8bT)
-
-magicbell:
-  apiKey: fe895cc2053486135913f5557c5fae1ca049a04e
-  apiSecret: c7d010e7def46aec61c8524f85371103a1e48fb0
-
-mercadopago:
-  publicKey: TEST-d0859391-4a9a-47ec-a0c1-74b6d81f7fa3
-  accessKey: TEST-1434091456534127-011920-67ef4409b41a150450c09f1fbac42aae-703836772
 
 jasypt:
   encryptor:

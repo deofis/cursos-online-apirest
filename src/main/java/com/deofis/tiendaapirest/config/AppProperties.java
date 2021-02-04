@@ -1,7 +1,6 @@
 package com.deofis.tiendaapirest.config;
 
 import lombok.Data;
-import lombok.Getter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -14,7 +13,6 @@ import java.util.List;
 public class AppProperties {
     private final OAuth2 oAuth2 = new OAuth2();
 
-    @Getter
     public static final class OAuth2 {
         private List<String> authorizedRedirectUris = new ArrayList<>();
 
