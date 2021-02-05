@@ -28,30 +28,56 @@ public class BannerServiceImpl implements BannerService {
     @Override
     public Banner subirBanner(BannerDto bannerDto, MultipartFile imagen) {
 
-        int orden = bannerDto.getOrden();
+        // int orden = bannerDto.getOrden();
 
         // Mantenemos referencia de cuantos banners existen para no superar el número
         // máximo.
         if (this.validarCantBanners())
-            throw new BannerException("Ya existen 4 Banners en la aplicación cargados. Porfavor, " +
+            throw new BannerException("Ya existen 5 Banners en la aplicación cargados. Porfavor, " +
                     "actualice un banner existente");
 
+        /*
         // Si un Banner ya tiene el número de orden que se desea asociar, se lanza
         // excepción.
         if (this.existeOrden(bannerDto.getOrden()))
             throw new BannerException("Ya existe un Banner con N° de Orden: " + orden);
 
+
         if (orden > 4 || orden <= 0)
-            throw new BannerException("El N° de orden debe ser un número entre 1 y 4");
+
+         */
 
         Imagen imagenBanner = this.imageService.subirImagen(imagen);
 
         Banner banner = Banner.builder()
                 .imagen(imagenBanner)
-                .actionUrl(this.clientUrl.concat("/" + bannerDto.getActionUrl()))
-                .orden(bannerDto.getOrden()).build();
+                .actionUrl(this.clientUrl.concat("/" + bannerDto.getActionUrl())).build();
+        this.asignarOrden(banner);
 
         return this.save(banner);
+    }
+
+    private void asignarOrden(Banner banner) {
+        int lastOrden;
+        if (this.bannerRepository.ultimoOrden() == null){
+            lastOrden = 0;
+        } else {
+                lastOrden = this.bannerRepository.ultimoOrden();
+        }
+
+        banner.setOrden(lastOrden + 1);
+    }
+
+    private void reordenarOrdenes(Banner banner) {
+        List<Banner> banners = this.bannerRepository.findAll();
+
+        int bannerOrden = banner.getOrden();
+        for (Banner b: banners) {
+            if (b.getOrden() > bannerOrden) {
+                b.setOrden(b.getOrden() - 1);
+            }
+            this.save(b);
+        }
     }
 
     @Override
@@ -93,6 +119,7 @@ public class BannerServiceImpl implements BannerService {
         banner.setImagen(null);
 
         this.imageService.eliminarImagen(imagenBanner);
+        this.reordenarOrdenes(banner);
         this.delete(banner);
     }
 
@@ -132,7 +159,7 @@ public class BannerServiceImpl implements BannerService {
     }
 
     private boolean validarCantBanners() {
-        return this.bannerRepository.findAll().size() > 3;
+        return this.bannerRepository.findAll().size() > 4;
     }
 
     private void eliminarFotoBanner(Banner banner) {
