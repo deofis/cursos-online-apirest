@@ -41,7 +41,7 @@ public class ProductoServiceImpl implements ProductoService {
                 .fechaCreacion(new Date())
                 .foto(null)
                 .imagenes(new ArrayList<>())
-                .activo(true)
+                .activo(producto.isActivo())
                 .destacado(producto.isDestacado())
                 .subcategoria(producto.getSubcategoria())
                 .marca(producto.getMarca())
