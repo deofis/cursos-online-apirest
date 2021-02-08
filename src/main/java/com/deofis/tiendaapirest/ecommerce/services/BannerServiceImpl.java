@@ -93,7 +93,7 @@ public class BannerServiceImpl implements BannerService {
     @Override
     public Banner actualizarActionUrl(Long bannerId, String actionUrl) {
         Banner banner = this.findById(bannerId);
-        banner.setActionUrl(actionUrl);
+        banner.setActionUrl(this.clientUrl.concat("/" + actionUrl));
         return this.save(banner);
     }
 
