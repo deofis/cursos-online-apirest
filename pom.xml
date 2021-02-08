@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.deofis</groupId>
     <artifactId>tienda-apirest</artifactId>
-    <version>0.3.7-SNAPSHOT</version>
+    <version>0.3.7-RELEASE</version>
     <name>tienda-apirest</name>
     <description>Apirest para el sistema de tienda online de Deofis.</description>
 
