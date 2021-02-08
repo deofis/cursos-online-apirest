@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -189,5 +190,146 @@ public class ImagenesProductoController {
 
         respose.put("mensaje", msg);
         return new ResponseEntity<>(respose, HttpStatus.OK);
+    }
+
+    /**
+     * Sube una imagen secundaria para un {@link com.deofis.tiendaapirest.productos.domain.Producto} requerido.
+     * URL: ~/api/productos/1/fotos
+     * HttpMethod: POST
+     * HttpStatus: CREATED
+     * @param productoId PathVariable Long id del producto a subir foto secundaria.
+     * @param foto MultipartFile archivo que contiene la foto secundaria del producto a crear.
+     * @return ResponseEntity {@link Imagen} con los datos de la foto creada y subida.
+     */
+    @PostMapping("/productos/{productoId}/fotos")
+    public ResponseEntity<?> subirFotoSecundariaProducto(@PathVariable Long productoId,
+                                                         @RequestParam(name = "foto") MultipartFile foto) {
+        Map<String, Object> response = new HashMap<>();
+        Imagen imagenSecundaria;
+
+        try {
+            imagenSecundaria = this.catalogoAdminService.subirFotoSecundariaProducto(productoId, foto);
+        } catch (ProductoException | FileException | AmazonS3Exception e) {
+            response.put("mensaje", "Error al subir la imagen secundaria para el producto");
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        response.put("foto", imagenSecundaria);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    /**
+     * Obtiene todas las {@link Imagen}es secundarias del producto requerido.
+     * URL: ~/api/productos/1/fotos
+     * HttpMethod: GET
+     * HttpStatus: OK
+     * @param productoId Long id del producto a obtener sus fotos secundarias.
+     * @return ResponseEntity con List de imagenes secundarias del producto.
+     */
+    @GetMapping("/productos/{productoId}/fotos")
+    public ResponseEntity<?> obtenerFotosSecundariasProducto(@PathVariable Long productoId) {
+        Map<String, Object> response = new HashMap<>();
+        List<Imagen> imagenesSecundarias;
+
+        try {
+            imagenesSecundarias = this.catalogoAdminService.obtenerFotosSecundariasProducto(productoId);
+        } catch (ProductoException | FileException e) {
+            response.put("mensaje", "Error al obtener las imagenes secundarias del producto");
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        response.put("fotos", imagenesSecundarias);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    /**
+     * Obtiene la {@link Imagen} secundaria de un producto requerido.
+     * URL: ~/api/productos/1/fotos/1
+     * HttpMethod: GET
+     * HttpStatus: OK
+     * @param productoId Long id del producto.
+     * @param imagenId Long id de la imagen a obtener.
+     * @return ResponseEntity con la {@link Imagen} requerida.
+     */
+    @GetMapping("/productos/{productoId}/fotos/{imagenId}")
+    public ResponseEntity<?> obtenerFotoSecundariaProducto(@PathVariable Long productoId,
+                                                           @PathVariable Long imagenId) {
+        Map<String, Object> response = new HashMap<>();
+        Imagen imagenSecundaria;
+
+        try {
+            imagenSecundaria = this.catalogoAdminService.obtenerFotoSecundariaProducto(productoId, imagenId);
+        } catch (ProductoException e) {
+            response.put("mensaje", "Error al obtener la imagen secundaria del producto");
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        response.put("foto", imagenSecundaria);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    /**
+     * Descarga la foto secundaria requerida de un producto solicitado.
+     * URL: ~/api/productos/1/fotos/1
+     * HttpMethod: GET
+     * HttpStatus: OK
+     * @param productoId Long id del producto.
+     * @param imagenId Long id de la imagen secundaria a descargar.
+     * @return ResponseEntity con los bytes que representan el archivo de la imagen secundaria.
+     */
+    @GetMapping("/productos/{productoId}/fotos/{imagenId}/descargar")
+    public ResponseEntity<?> descargarFotoSecundariaProducto(@PathVariable Long productoId,
+                                                             @PathVariable Long imagenId) {
+        Map<String, Object> response = new HashMap<>();
+        byte[] fotoBytes;
+        ByteArrayResource fotoAsResource;
+        String imagePath;
+
+        try {
+            fotoBytes = this.catalogoAdminService.descargarImagenSecundariaProducto(productoId, imagenId);
+            imagePath = this.catalogoAdminService.obtenerPathImagenSecundaria(productoId, imagenId);
+            fotoAsResource = new ByteArrayResource(fotoBytes);
+        } catch (ProductoException | FileException | AmazonS3Exception e) {
+            response.put("mensaje", "Error al descargar imagen secundaria del producto");
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return ResponseEntity
+                .ok()
+                .header("Content-type", "application/octet-stream")
+                .header("Content-disposition", "attachment; filename=\"" + imagePath + "\"")
+                .body(fotoAsResource);
+    }
+
+    /**
+     * Toma una imagen y, si pertenece al producto requerido, la elimina.
+     * URL: ~/api/productos/1/fotos/1
+     * HttpMethod: DELETE
+     * HttpStatus: OK
+     * @param productoId Long id del producto al que pertenece la imagen a eliminar.
+     * @param imagenId Long id de la imagen a eliminar.
+     * @return ResponseEntity con mensaje de éxito.
+     */
+    @DeleteMapping("/productos/{productoId}/fotos/{imagenId}")
+    public ResponseEntity<?> eliminarFotoSecundariaProducto(@PathVariable Long productoId,
+                                                            @PathVariable Long imagenId) {
+        Map<String, Object> response = new HashMap<>();
+        String msg;
+
+        try {
+            this.catalogoAdminService.eliminarFotoSecundariaProducto(productoId, imagenId);
+            msg = "¡Imagen secundaria eliminado con éxito!";
+        } catch (ProductoException | FileException | AmazonS3Exception e) {
+            response.put("mensaje", "Error al eliminar la imagen secundaria del producto");
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        response.put("mensaje", msg);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
