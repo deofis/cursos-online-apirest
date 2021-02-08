@@ -198,6 +198,37 @@
                     <javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <id>prepare</id>
+                        <phase>install</phase>
+                        <configuration>
+                            <target>
+
+                                <property name="buildName" value="${project.build.finalName}.jar"/>
+
+                                <copy todir="${user.home}/.m2/repository/com/deofis/${project.artifactId}/${project.version}/aws-build/" overwrite="false">
+                                    <fileset file="${project.build.directory}/${project.build.finalName}.jar"/>
+                                    <fileset dir="./aws" />
+                                </copy>
+
+                                <!--suppress UnresolvedMavenProperty, UnresolvedMavenProperty -->
+                                <replace file="${user.home}/.m2/repository/com/deofis/${project.artifactId}/${project.version}/aws-build/Procfile" token="@jarname@" value="${buildName}"/>
+
+                                <zip compress="false" destfile="${user.home}/.m2/repository/com/deofis/${project.artifactId}/${project.version}/aws-build/tienda-apirest.jar" basedir="${user.home}/.m2/repository/com/deofis/${project.artifactId}/${project.version}/aws-build"/>
+
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
