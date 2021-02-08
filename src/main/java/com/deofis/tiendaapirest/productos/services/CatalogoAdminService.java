@@ -53,6 +53,52 @@ public interface CatalogoAdminService {
     void eliminarFotoPpalProducto(Long productoId);
 
     /**
+     * Crea, sube y vincula una imagen secundaria para un {@link Producto}.
+     * @param productoId Long id del producto a cargar imagen secundaria.
+     * @param foto MultipartFile con el archivo que contiene la imagen.
+     * @return {@link Imagen} con los datos de la nueva foto secundaria creada.
+     */
+    Imagen subirFotoSecundariaProducto(Long productoId, MultipartFile foto);
+
+    /**
+     * Obtiene todas las imagenes secundarias asociadas a un {@link Producto} requerido.
+     * @param productoId Long id del producto a obtener sus imagenes secundarias.
+     * @return {@link  Imagen}es secundarias del producto requerido.
+     */
+    List<Imagen> obtenerFotosSecundariasProducto(Long productoId);
+
+    /**
+     * Obtiene la {@link Imagen} secundaria requerida para un producto solicitado.
+     * @param productoId Long id del producto.
+     * @param imagenId Long id de la imagen a obtener del producto.
+     * @return {@link Imagen} con los datos de la imagen secundaria.
+     */
+    Imagen obtenerFotoSecundariaProducto(Long productoId, Long imagenId);
+
+    /**
+     * Obtiene el path de la foto secundaria de un {@link Producto} solicitada.
+     * @param productoId Long id del producto.
+     * @param imagenId Long id de la imagen secundaria a obtener path.
+     * @return String path de foto secundaria del producto.
+     */
+    String obtenerPathImagenSecundaria(Long productoId, Long imagenId);
+
+    /**
+     * Descarga una imagen secundaria requerida para un producto solicitado.
+     * @param productoId Long id del producto.
+     * @param imagenId Long id d ela imagen a descargar del producto.
+     * @return byte[] del archivo de imagen.
+     */
+    byte[] descargarImagenSecundariaProducto(Long productoId, Long imagenId);
+
+    /**
+     * Elimina una imagen secundaria del {@link Producto}.
+     * @param productoId Long id del producto a eliminar la foto secundaria.
+     * @param imagenId Long id de la imagen a eliminar.
+     */
+    void eliminarFotoSecundariaProducto(Long productoId, Long imagenId);
+
+    /**
      * Cancela la creación de un producto en caso de que se desee, provocando su
      * eliminación completa del sistema.
      * <br>
