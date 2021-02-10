@@ -69,7 +69,7 @@ public class Operacion implements Serializable {
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private MedioPago medioPago;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "operacion_pago_id")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private OperacionPago pago;

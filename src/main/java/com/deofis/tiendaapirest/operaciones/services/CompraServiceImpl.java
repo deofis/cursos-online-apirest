@@ -6,6 +6,7 @@ import com.deofis.tiendaapirest.operaciones.domain.EstadoOperacion;
 import com.deofis.tiendaapirest.operaciones.domain.Operacion;
 import com.deofis.tiendaapirest.operaciones.exceptions.OperacionException;
 import com.deofis.tiendaapirest.operaciones.repositories.OperacionRepository;
+import com.deofis.tiendaapirest.pagos.domain.OperacionPago;
 import com.deofis.tiendaapirest.perfiles.services.PerfilService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -101,6 +102,13 @@ public class CompraServiceImpl implements CompraService {
 
         return this.operacionRepository.findByNroOperacionAndCliente(nroOperacion, cliente)
                 .orElseThrow(() -> new OperacionException("No existe la operación del cliente seleccionado"));
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public OperacionPago obtenerPagoCompra(Long nroOperacion) {
+        Operacion operacion = this.verCompra(nroOperacion);
+        return operacion.getPago();
     }
 
     /**
