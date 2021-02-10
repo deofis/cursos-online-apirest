@@ -13,6 +13,7 @@ import com.deofis.tiendaapirest.operaciones.domain.DetalleOperacion;
 import com.deofis.tiendaapirest.operaciones.domain.EstadoOperacion;
 import com.deofis.tiendaapirest.operaciones.domain.EventoOperacion;
 import com.deofis.tiendaapirest.operaciones.domain.Operacion;
+import com.deofis.tiendaapirest.operaciones.dto.OperacionRequest;
 import com.deofis.tiendaapirest.operaciones.exceptions.OperacionException;
 import com.deofis.tiendaapirest.operaciones.repositories.OperacionRepository;
 import com.deofis.tiendaapirest.pagos.domain.MedioPago;
@@ -30,6 +31,7 @@ import org.springframework.statemachine.StateMachine;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -60,23 +62,9 @@ public class OperacionServiceImpl implements OperacionService {
     @Override
     public OperacionPagoInfo registrarNuevaOperacion(Operacion operacion) {
 
-        if (!this.autenticacionService.estaLogueado())
-            throw new AutenticacionException("Usuario no logueado en el sistema");
-
+        this.validarAutenticacion();
         Cliente cliente = this.perfilService.obtenerDatosCliente();
-        /*
-        AHORA EL SISTEMA REQUIERE AUTENTICACIÓN SIEMPRE ANTES DE COMPLETAR COMPRAS
-        if (this.autenticacionService.estaLogueado()) {
-            cliente = this.perfilService.obtenerPerfil().getCliente();
-        } else {
-            cliente = this.clienteRepository.findById(operacion.getCliente().getId())
-                    .orElseThrow(() -> new OperacionException("El cliente seleccionado debe estar cargado " +
-                            "en la base de datos."));
-        }
-         */
-
-        MedioPago medioPago = this.medioPagoRepository.findById(operacion.getMedioPago().getId())
-                .orElseThrow(() -> new OperacionException("Medio de pago no encontrado en el sistema"));
+        MedioPago medioPago = this.obtenerMedioPagoGuardado(operacion.getMedioPago().getId());
 
         Operacion nuevaOperacion = Operacion.builder()
                 .cliente(cliente)
@@ -155,6 +143,41 @@ public class OperacionServiceImpl implements OperacionService {
         // Enviar la notificación al usuario que realizó la compra
         this.notificacionService.enviarNotificacion(nuevaOperacion, nuevaOperacion.getCliente().getEmail());
         return operacionPagoInfo;
+    }
+
+    private MedioPago obtenerMedioPagoGuardado(Long medioPagoId) {
+        return this.medioPagoRepository.findById(medioPagoId)
+                .orElseThrow(() -> new OperacionException("Medio de pago no implementado en el sistema"));
+    }
+
+    private void validarAutenticacion() {
+        if (!this.autenticacionService.estaLogueado())
+            throw new AutenticacionException("Usuario no logueado en el sistema");
+    }
+
+    @Transactional
+    @Override
+    public OperacionPagoInfo registrarComprarYa(OperacionRequest operacionRequest) {
+
+        this.validarAutenticacion();
+        Cliente clienteActual = this.perfilService.obtenerDatosCliente();
+        MedioPago medioPago = this.obtenerMedioPagoGuardado(operacionRequest.getMedioPago().getId());
+
+        Operacion nuevaOperacion = Operacion.builder()
+                .cliente(clienteActual)
+                .direccionEnvio(operacionRequest.getDireccionEnvio())
+                .fechaOperacion(new Date(new Date().getTime()))
+                .fechaEnviada(null)
+                .fechaRecibida(null)
+                .medioPago(medioPago)
+                .pago(null)
+                .estado(EstadoOperacion.PAYMENT_PENDING)
+                .total(0.0)
+                .items(new ArrayList<>())
+                .build();
+
+        nuevaOperacion.getItems().add(operacionRequest.getItem());
+        return this.registrarNuevaOperacion(nuevaOperacion);
     }
 
     @Transactional

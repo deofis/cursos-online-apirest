@@ -2,6 +2,7 @@ package com.deofis.tiendaapirest.operaciones.services;
 
 import com.deofis.tiendaapirest.globalservices.CrudService;
 import com.deofis.tiendaapirest.operaciones.domain.Operacion;
+import com.deofis.tiendaapirest.operaciones.dto.OperacionRequest;
 import com.deofis.tiendaapirest.pagos.factory.OperacionPagoInfo;
 
 /**
@@ -18,9 +19,21 @@ public interface OperacionService extends CrudService<Operacion, Long> {
      * <br>
      * Crea el pago a realizar y lo devuelve con su información correspondiente.
      * @param operacion Operacion a registrar.
-     * @return OperacionPagoInfo con la información necesaria para completar el pago.
+     * @return {@link OperacionPagoInfo} con la información del pago creado.
      */
     OperacionPagoInfo registrarNuevaOperacion(Operacion operacion);
+
+    /**
+     * Servicio que registra una nueva operación a través del "Comprar Ya", la cual
+     * no es generada por un carrito, si no que a partir de un item único con un solo
+     * SKU y cantidad.
+     * <br>
+     * En su implementación por defecto, solo se encarga de crear la {@link Operacion} y
+     * registrarla a usando {@link OperacionService} registrarNuevaOperacion.
+     * @param operacionRequest {@link OperacionRequest} con los datos de la nueva operación a crear.
+     * @return {@link OperacionPagoInfo} con la información del pago creado.
+     */
+    OperacionPagoInfo registrarComprarYa(OperacionRequest operacionRequest);
 
     /**
      * Registra, por parte de un usuario administrador,  el envio de una operación compra/venta hacia el cliente.

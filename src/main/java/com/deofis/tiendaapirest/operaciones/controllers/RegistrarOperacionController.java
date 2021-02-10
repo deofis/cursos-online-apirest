@@ -1,6 +1,8 @@
 package com.deofis.tiendaapirest.operaciones.controllers;
 
+import com.deofis.tiendaapirest.autenticacion.exceptions.AutenticacionException;
 import com.deofis.tiendaapirest.operaciones.domain.Operacion;
+import com.deofis.tiendaapirest.operaciones.dto.OperacionRequest;
 import com.deofis.tiendaapirest.operaciones.exceptions.OperacionException;
 import com.deofis.tiendaapirest.operaciones.services.OperacionService;
 import com.deofis.tiendaapirest.pagos.factory.OperacionPagoInfo;
@@ -43,7 +45,7 @@ public class RegistrarOperacionController {
 
         try {
             pagoInfo = this.operacionService.registrarNuevaOperacion(operacion);
-        } catch (OperacionException | ProductoException | PerfilesException | SkuException e) {
+        } catch (OperacionException | ProductoException | PerfilesException | AutenticacionException | SkuException e) {
             response.put("mensaje", "Error al registrar la nueva compra");
             response.put("error", e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -53,4 +55,29 @@ public class RegistrarOperacionController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
+    /**
+     * Registra una nueva operación de compra/venta con la funcionalidad de Comprar Ya,
+     * lo que no requiere el paso previo de agregar items al carrito.
+     * URL: ~/api/operaciones/comprar/ya
+     * HttpMethod: POST
+     * HttpStatus: CREATED
+     * @param operacionRequest {@link OperacionRequest} con los datos de la compra.
+     * @return ResponseEntity con el {@link OperacionPagoInfo} creado con la info del pago.
+     */
+    @PostMapping("/operaciones/comprar/ya")
+    public ResponseEntity<?> comprarYa(@RequestBody OperacionRequest operacionRequest) {
+        Map<String, Object> response = new HashMap<>();
+        OperacionPagoInfo pagoInfo;
+
+        try {
+            pagoInfo = this.operacionService.registrarComprarYa(operacionRequest);
+        } catch (OperacionException | ProductoException | PerfilesException | AutenticacionException | SkuException e) {
+            response.put("mensaje", "Error al registrar la nueva compra");
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        response.put("pago", pagoInfo);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
 }
