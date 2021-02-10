@@ -4,7 +4,8 @@ import com.deofis.tiendaapirest.checkout.dto.CheckoutPayload;
 import com.deofis.tiendaapirest.operaciones.domain.EstadoOperacion;
 import com.deofis.tiendaapirest.operaciones.domain.EventoOperacion;
 import com.deofis.tiendaapirest.operaciones.domain.Operacion;
-import com.deofis.tiendaapirest.operaciones.services.OperacionService;
+import com.deofis.tiendaapirest.operaciones.exceptions.OperacionException;
+import com.deofis.tiendaapirest.operaciones.repositories.OperacionRepository;
 import com.deofis.tiendaapirest.operaciones.services.StateMachineService;
 import com.deofis.tiendaapirest.pagos.PaymentException;
 import com.deofis.tiendaapirest.pagos.domain.MedioPagoEnum;
@@ -26,7 +27,7 @@ import java.util.Date;
 @Slf4j
 public class CheckoutServiceImpl implements CheckoutService {
 
-    private final OperacionService operacionService;
+    private final OperacionRepository operacionRepository;
     private final StateMachineService stateMachineService;
 
     private final PagoStrategyFactory pagoStrategyFactory;
@@ -34,8 +35,25 @@ public class CheckoutServiceImpl implements CheckoutService {
 
     @Transactional
     @Override
+    public OperacionPagoInfo iniciarCheckout(Operacion operacion) {
+        PagoStrategy pagoStrategy;
+
+        if (operacion.getMedioPago().getNombre().equals(MedioPagoEnum.PAYPAL))
+            pagoStrategy = this.pagoStrategyFactory.get(String.valueOf(PagoStrategyName.payPalStrategy));
+        else if (operacion.getMedioPago().getNombre().equals(MedioPagoEnum.EFECTIVO))
+            pagoStrategy = this.pagoStrategyFactory.get(String.valueOf(PagoStrategyName.cashStrategy));
+        else if (operacion.getMedioPago().getNombre().equals(MedioPagoEnum.MERCADO_PAGO))
+            pagoStrategy = this.pagoStrategyFactory.get(String.valueOf(PagoStrategyName.mercadoPagoStrategy));
+        else pagoStrategy = null;
+
+        return pagoStrategy != null ? pagoStrategy.crearPago(operacion) : null;
+    }
+
+    @Transactional
+    @Override
     public OperacionPagoInfo ejecutarCheckoutSuccess(CheckoutPayload checkoutPayload) {
-        Operacion operacion = this.operacionService.findById(checkoutPayload.getNroOperacion());
+        Operacion operacion = this.operacionRepository.findById(checkoutPayload.getNroOperacion())
+                .orElseThrow(() -> new OperacionException("No existe la operación con n°: " + checkoutPayload.getNroOperacion()));
         StateMachine<EstadoOperacion, EventoOperacion> sm = this.stateMachineService
                 .build(checkoutPayload.getNroOperacion());
 
@@ -63,7 +81,7 @@ public class CheckoutServiceImpl implements CheckoutService {
         this.stateMachineService.enviarEvento(checkoutPayload.getNroOperacion(), sm, EventoOperacion.COMPLETE_PAYMENT);
 
         // Por último, guardamos la operación actualizada y devolvemos el objeto con la info del pago (DTO).
-        this.operacionService.save(operacion);
+        this.operacionRepository.save(operacion);
         return pagoInfo;
     }
 

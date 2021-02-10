@@ -3,6 +3,7 @@ package com.deofis.tiendaapirest.operaciones.services;
 import com.deofis.tiendaapirest.autenticacion.dto.UsuarioDTO;
 import com.deofis.tiendaapirest.autenticacion.exceptions.AutenticacionException;
 import com.deofis.tiendaapirest.autenticacion.services.AutenticacionService;
+import com.deofis.tiendaapirest.checkout.services.CheckoutService;
 import com.deofis.tiendaapirest.clientes.domain.Cliente;
 import com.deofis.tiendaapirest.emails.dto.NotificationEmail;
 import com.deofis.tiendaapirest.emails.services.MailService;
@@ -15,13 +16,9 @@ import com.deofis.tiendaapirest.operaciones.domain.Operacion;
 import com.deofis.tiendaapirest.operaciones.exceptions.OperacionException;
 import com.deofis.tiendaapirest.operaciones.repositories.OperacionRepository;
 import com.deofis.tiendaapirest.pagos.domain.MedioPago;
-import com.deofis.tiendaapirest.pagos.domain.MedioPagoEnum;
 import com.deofis.tiendaapirest.pagos.factory.OperacionPagoInfo;
 import com.deofis.tiendaapirest.pagos.factory.OperacionPagoMapping;
 import com.deofis.tiendaapirest.pagos.repositories.MedioPagoRepository;
-import com.deofis.tiendaapirest.pagos.services.strategy.PagoStrategy;
-import com.deofis.tiendaapirest.pagos.services.strategy.PagoStrategyFactory;
-import com.deofis.tiendaapirest.pagos.services.strategy.PagoStrategyName;
 import com.deofis.tiendaapirest.perfiles.domain.Perfil;
 import com.deofis.tiendaapirest.perfiles.services.AdministradorService;
 import com.deofis.tiendaapirest.perfiles.services.PerfilService;
@@ -53,7 +50,7 @@ public class OperacionServiceImpl implements OperacionService {
     private final SkuService skuService;
     private final PerfilService perfilService;
 
-    private final PagoStrategyFactory pagoStrategyFactory;
+    private final CheckoutService checkoutService;
     private final OperacionPagoMapping operacionPagoMapping;
     private final RoundService roundService;
 
@@ -150,7 +147,7 @@ public class OperacionServiceImpl implements OperacionService {
 
         log.info("total guardado -> " + nuevaOperacion.getTotal());
         // Delegar la creación del PAGO de operación al PagoStrategy correspondiente.
-        OperacionPagoInfo operacionPagoInfo = this.crearPago(nuevaOperacion);
+        OperacionPagoInfo operacionPagoInfo = this.checkoutService.iniciarCheckout(nuevaOperacion);
 
         // Persistir el pago creado y pendiente de pagar asociado a la operación recientemente registrada.
         this.guardarOperacionPago(nuevaOperacion, operacionPagoInfo);
@@ -225,20 +222,6 @@ public class OperacionServiceImpl implements OperacionService {
     @Override
     public void deleteById(Long aLong) {
 
-    }
-
-    private OperacionPagoInfo crearPago(Operacion nuevaOperacion) {
-        PagoStrategy pagoStrategy;
-
-        if (nuevaOperacion.getMedioPago().getNombre().equals(MedioPagoEnum.PAYPAL))
-            pagoStrategy = this.pagoStrategyFactory.get(String.valueOf(PagoStrategyName.payPalStrategy));
-        else if (nuevaOperacion.getMedioPago().getNombre().equals(MedioPagoEnum.EFECTIVO))
-            pagoStrategy = this.pagoStrategyFactory.get(String.valueOf(PagoStrategyName.cashStrategy));
-        else if (nuevaOperacion.getMedioPago().getNombre().equals(MedioPagoEnum.MERCADO_PAGO))
-            pagoStrategy = this.pagoStrategyFactory.get(String.valueOf(PagoStrategyName.mercadoPagoStrategy));
-        else pagoStrategy = null;
-
-        return pagoStrategy != null ? pagoStrategy.crearPago(nuevaOperacion) : null;
     }
 
     private void guardarOperacionPago(Operacion nuevaOperacion, OperacionPagoInfo operacionPagoInfo) {
