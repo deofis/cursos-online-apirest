@@ -6,6 +6,7 @@ import com.deofis.tiendaapirest.productos.exceptions.ProductoException;
 import com.deofis.tiendaapirest.productos.repositories.ProductoRepository;
 import com.deofis.tiendaapirest.productos.repositories.UnidadMedidaRepository;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class ProductoServiceImpl implements ProductoService {
 
     private final ProductoRepository productoRepository;
@@ -90,7 +92,21 @@ public class ProductoServiceImpl implements ProductoService {
         productoActual.setMarca(producto.getMarca());
         productoActual.setUnidadMedida(producto.getUnidadMedida());
 
+        productoActual.getDefaultSku().setNombre(producto.getNombre());
+        productoActual.getDefaultSku().setDescripcion(producto.getDescripcion());
+
+        if (!productoActual.isVendibleSinPropiedades()) {
+            this.actualizarDatosSkusProductos(productoActual);
+        }
+
         return this.save(productoActual);
+    }
+
+    private void actualizarDatosSkusProductos(Producto producto) {
+        for (Sku skuAdicional: producto.getSkus()) {
+            skuAdicional.setNombre(producto.getNombre());
+            skuAdicional.setDescripcion(producto.getDescripcion());
+        }
     }
 
     @Transactional
