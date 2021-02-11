@@ -1,6 +1,7 @@
 package com.deofis.tiendaapirest.operaciones.services;
 
 import com.deofis.tiendaapirest.operaciones.domain.Operacion;
+import com.deofis.tiendaapirest.pagos.domain.OperacionPago;
 
 import java.util.List;
 
@@ -68,4 +69,11 @@ public interface CompraService {
      * @return Operacion.
      */
     Operacion verCompra(Long nroOperacion);
+
+    /**
+     * Obtiene el pago de una compra en particular de un usuario.
+     * @param nroOperacion Long id de la operacion a obtener su pago.
+     * @return {@link OperacionPago} correspondiente a la compra.
+     */
+    OperacionPago obtenerPagoCompra(Long nroOperacion);
 }

@@ -2,6 +2,7 @@ package com.deofis.tiendaapirest.autenticacion.security;
 
 import com.deofis.tiendaapirest.autenticacion.exceptions.TokenException;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import lombok.Getter;
 import lombok.Setter;
@@ -81,7 +82,11 @@ public class JwtProveedor {
      * @return boolean si fue o no validado.
      */
     public boolean validateToken(String jwt) {
-        parser().setSigningKey(getPublicKey()).parseClaimsJws(jwt);
+        try {
+            parser().setSigningKey(getPublicKey()).parseClaimsJws(jwt);
+        } catch (ExpiredJwtException e) {
+            return false;
+        }
         return true;
     }
 

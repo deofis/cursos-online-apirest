@@ -4,10 +4,13 @@ spring:
     username: dev
     password: userdev1295
     driver-class-name: com.mysql.cj.jdbc.Driver
+    initializationMode: always
   jpa:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
+        hbm2ddl:
+          import_files_sql_extractor: org.hibernate.tool.hbm2ddl.MultipleLinesSqlCommandExtractor
     database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
       ddl-auto: update

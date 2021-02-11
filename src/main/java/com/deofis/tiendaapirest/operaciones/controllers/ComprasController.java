@@ -6,6 +6,7 @@ import com.deofis.tiendaapirest.operaciones.domain.EstadoOperacion;
 import com.deofis.tiendaapirest.operaciones.domain.Operacion;
 import com.deofis.tiendaapirest.operaciones.exceptions.OperacionException;
 import com.deofis.tiendaapirest.operaciones.services.CompraService;
+import com.deofis.tiendaapirest.pagos.domain.OperacionPago;
 import com.deofis.tiendaapirest.perfiles.exceptions.PerfilesException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -167,5 +168,10 @@ public class ComprasController {
 
         response.put("compra", compra);
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/perfil/compras/{nroOperacion}/pago")
+    public ResponseEntity<OperacionPago> obtenerPagoCompra(@PathVariable Long nroOperacion) {
+        return new ResponseEntity<>(this.compraService.obtenerPagoCompra(nroOperacion), HttpStatus.OK);
     }
 }

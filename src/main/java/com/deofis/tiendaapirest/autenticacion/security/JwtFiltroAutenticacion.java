@@ -39,6 +39,9 @@ public class JwtFiltroAutenticacion extends OncePerRequestFilter {
 
             authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authentication);
+        } else if (StringUtils.hasText(jwt)){
+            if (!this.jwtProveedor.validateToken(jwt))
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "JWT expired");
         }
 
         filterChain.doFilter(request, response);
