@@ -130,7 +130,6 @@ public class CatalogoAdminServiceImpl implements CatalogoAdminService {
         for (Imagen im: producto.getImagenes()) {
             if (im.getId().equals(imagenId)){
                 imagenVieja = im;
-                producto.getImagenes().remove(im);
                 existeImg = true;
                 break;
             }
@@ -140,9 +139,7 @@ public class CatalogoAdminServiceImpl implements CatalogoAdminService {
             throw new ProductoException("No existe la imagen secundaria con id: " + imagenId + " para el producto con" +
                     " id: " + producto.getId());
 
-        this.productoService.save(producto);
         this.eliminarFotoSecundariaProducto(productoId, imagenVieja.getId());
-
         return this.subirFotoSecundariaProducto(producto.getId(), foto);
     }
 

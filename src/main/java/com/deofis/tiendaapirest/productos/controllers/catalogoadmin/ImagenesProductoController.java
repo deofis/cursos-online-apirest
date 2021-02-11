@@ -233,7 +233,19 @@ public class ImagenesProductoController {
     public ResponseEntity<?> cambiarImagenSecundariaProducto(@PathVariable Long productoId,
                                                              @PathVariable Long imagenId,
                                                              @RequestParam(name = "foto") MultipartFile foto) {
-        return null;
+        Map<String, Object> response = new HashMap<>();
+        Imagen imagenNueva;
+
+        try {
+            imagenNueva = this.catalogoAdminService.cambiarImagenSecundariaProducto(productoId, imagenId, foto);
+        } catch (ProductoException | FileException | AmazonS3Exception e) {
+            response.put("mensaje", "Error al cambiar la imagen secundaria del producto");
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        response.put("foto", imagenNueva);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     /**
