@@ -220,6 +220,23 @@ public class ImagenesProductoController {
     }
 
     /**
+     * API que cambia una imagen secundaria de un producto existente.
+     * URL: ~/api/productos/1/fotos/1
+     * HttpMethod: PUT
+     * HttpStatus: OK
+     * @param productoId Long id del producto a cambiar alguna imagen secundaria.
+     * @param imagenId Long id de la imagen vieja que se desea reemplazar.
+     * @param foto MultipartFile con el archivo de la imagen secundaria nueva del producto.
+     * @return ResponseEntity con la imagen.
+     */
+    @PutMapping("/productos/{productoId}/fotos/{imagenId}")
+    public ResponseEntity<?> cambiarImagenSecundariaProducto(@PathVariable Long productoId,
+                                                             @PathVariable Long imagenId,
+                                                             @RequestParam(name = "foto") MultipartFile foto) {
+        return null;
+    }
+
+    /**
      * Obtiene todas las {@link Imagen}es secundarias del producto requerido.
      * URL: ~/api/productos/1/fotos
      * HttpMethod: GET

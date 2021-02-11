@@ -120,9 +120,30 @@ public class CatalogoAdminServiceImpl implements CatalogoAdminService {
         return imgSecundaria;
     }
 
+    @Transactional
     @Override
     public Imagen cambiarImagenSecundariaProducto(Long productoId, Long imagenId, MultipartFile foto) {
-        return null;
+        Producto producto = this.productoService.obtenerProducto(productoId);
+        Imagen imagenVieja = null;
+
+        boolean existeImg = false;
+        for (Imagen im: producto.getImagenes()) {
+            if (im.getId().equals(imagenId)){
+                imagenVieja = im;
+                producto.getImagenes().remove(im);
+                existeImg = true;
+                break;
+            }
+        }
+
+        if (!existeImg)
+            throw new ProductoException("No existe la imagen secundaria con id: " + imagenId + " para el producto con" +
+                    " id: " + producto.getId());
+
+        this.productoService.save(producto);
+        this.eliminarFotoSecundariaProducto(productoId, imagenVieja.getId());
+
+        return this.subirFotoSecundariaProducto(producto.getId(), foto);
     }
 
     @Transactional(readOnly = true)
