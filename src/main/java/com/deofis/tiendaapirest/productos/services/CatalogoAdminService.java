@@ -76,6 +76,15 @@ public interface CatalogoAdminService {
     Imagen obtenerFotoSecundariaProducto(Long productoId, Long imagenId);
 
     /**
+     * Cambia una {@link Imagen} secundaria de un {@link Producto} por otra.
+     * @param productoId Long id del producto a la que pertenece la imagen.
+     * @param imagenId Long id de la imagen a cambiar.
+     * @param foto  {@link MultipartFile} con el archivo que contiene la nueva imagen.
+     * @return {@link Imagen} secundaria nueva asociada al producto.
+     */
+    Imagen cambiarImagenSecundariaProducto(Long productoId, Long imagenId, MultipartFile foto);
+
+    /**
      * Obtiene el path de la foto secundaria de un {@link Producto} solicitada.
      * @param productoId Long id del producto.
      * @param imagenId Long id de la imagen secundaria a obtener path.

@@ -120,6 +120,11 @@ public class CatalogoAdminServiceImpl implements CatalogoAdminService {
         return imgSecundaria;
     }
 
+    @Override
+    public Imagen cambiarImagenSecundariaProducto(Long productoId, Long imagenId, MultipartFile foto) {
+        return null;
+    }
+
     @Transactional(readOnly = true)
     @Override
     public String obtenerPathImagenSecundaria(Long productoId, Long imagenId) {
