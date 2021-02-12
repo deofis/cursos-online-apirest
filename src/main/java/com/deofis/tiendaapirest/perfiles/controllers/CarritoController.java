@@ -40,7 +40,7 @@ public class CarritoController {
 
         try {
             carrito = this.carritoService.agregarItem(skuId, cantidad);
-        } catch (PerfilesException | SkuException | ClienteException | AutenticacionException e) {
+        } catch (CarritoException | PerfilesException | SkuException | ClienteException | AutenticacionException e) {
             response.put("mensaje", "Error al agregar item al carrito");
             response.put("error", e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);

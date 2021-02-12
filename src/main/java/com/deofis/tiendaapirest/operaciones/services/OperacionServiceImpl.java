@@ -23,6 +23,7 @@ import com.deofis.tiendaapirest.pagos.repositories.MedioPagoRepository;
 import com.deofis.tiendaapirest.perfiles.domain.Perfil;
 import com.deofis.tiendaapirest.perfiles.services.AdministradorService;
 import com.deofis.tiendaapirest.perfiles.services.PerfilService;
+import com.deofis.tiendaapirest.perfiles.services.ValidadorItems;
 import com.deofis.tiendaapirest.productos.domain.Sku;
 import com.deofis.tiendaapirest.productos.services.SkuService;
 import lombok.AllArgsConstructor;
@@ -45,7 +46,9 @@ public class OperacionServiceImpl implements OperacionService {
 
     private final AutenticacionService autenticacionService;
     private final AdministradorService administradorService;
+
     private final MailService mailService;
+    private final NotificacionService notificacionService;
 
     private final OperacionRepository operacionRepository;
     private final MedioPagoRepository medioPagoRepository;
@@ -53,10 +56,10 @@ public class OperacionServiceImpl implements OperacionService {
     private final PerfilService perfilService;
 
     private final CheckoutService checkoutService;
+
     private final OperacionPagoMapping operacionPagoMapping;
     private final RoundService roundService;
-
-    private final NotificacionService notificacionService;
+    private final ValidadorItems validadorItems;
 
     @Transactional
     @Override
@@ -81,8 +84,16 @@ public class OperacionServiceImpl implements OperacionService {
 
         boolean hayDisponibilidad = true;
         boolean hayItemSinCantidad = false;
+        boolean itemNoVendible = false;
         for (DetalleOperacion item: operacion.getItems()) {
             Sku sku = this.skuService.obtenerSku(item.getSku().getId());
+            // Validamos que el SKU no sea default sku si su producto NO es vendible sin propiedades (no tiene
+            // skus adicionales)
+            if (this.validadorItems.esItemNoVendible(sku)) {
+                itemNoVendible = true;
+                break;
+            }
+
             // Seteamos el SKU completo al item (lo que esta guardado en la BD).
             item.setSku(sku);
 
@@ -120,6 +131,10 @@ public class OperacionServiceImpl implements OperacionService {
         if (hayItemSinCantidad)
             throw new OperacionException("Error al completar la compra: La cantidad de productos no puede ser" +
                     " menor o igual que 0");
+
+        if (itemNoVendible)
+            throw new OperacionException("Hay al menos un item no vendible: algún item posee un sku por defecto y" +
+                    " el producto tiene skus adicionales.");
 
         this.save(nuevaOperacion);
 

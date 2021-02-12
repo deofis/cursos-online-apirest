@@ -22,12 +22,18 @@ public class CarritoServiceImpl implements CarritoService {
     private final PerfilService perfilService;
     private final SkuService skuService;
 
+    private final ValidadorItems validadorItems;
+
     @Transactional
     @Override
     public Carrito agregarItem(Long skuId, Integer cantidad) {
         boolean existeItem = false;
         Carrito carrito = this.perfilService.obtenerCarrito();
         Sku sku = this.skuService.obtenerSku(skuId);
+
+        if (this.validadorItems.esItemNoVendible(sku))
+            throw new CarritoException("El item no es vendible: el item posee un sku por defecto y" +
+                    " el producto tiene skus adicionales.");
 
         for (DetalleCarrito item: carrito.getItems()) {
             if (item.getSku().equals(sku)) {
