@@ -22,7 +22,7 @@ spring:
     host: smtp.gmail.com
     port: 587
     username: deofis.github@gmail.com
-    password: ENC(/qiwkv5cnDoUi6mhtHjSAQ41w+xl1vXw)
+    password: ENC(2j2tFEz5rbsf0BcsJH4U5hw9ogYdmL3o)
     properties:
       mail:
         smtp:
