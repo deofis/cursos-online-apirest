@@ -32,7 +32,7 @@ spring:
             auth: true
 
 endpoints:
-  baseUrl: https://api.deofisdev.online
+  baseUrl: https://deofis-tienda-apirest.herokuapp.com
   clientUrl: https://wantfrom-tienda.web.app
 
 amazon:
