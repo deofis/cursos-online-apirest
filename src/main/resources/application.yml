@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: qaheroku
+    active: qa
 
   jackson:
     time-zone: America/Argentina/Cordoba
