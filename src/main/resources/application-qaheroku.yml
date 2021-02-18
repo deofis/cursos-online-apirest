@@ -1,23 +1,28 @@
 spring:
   datasource:
-    url: jdbc:mysql://tk3mehkfmmrhjg0b.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/guytjzpp2f3u7y7m?reconnect=true&allowPublicKeyRetrieval=true&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=America/Argentina/Cordoba
-    username: upjn2kkzdtrhvwgi
-    password: myk6eyzouzao4fil
+    url: jdbc:mysql://d6rii63wp64rsfb5.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/rp41skpqlli41p9k?reconnect=true&allowPublicKeyRetrieval=true&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=America/Argentina/Cordoba
+    username: ar7zgy1he1mmxl34
+    password: edmxk73fl4bffvru
     driver-class-name: com.mysql.cj.jdbc.Driver
-
+    initialization-mode: always
   jpa:
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQL5Dialect
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        hbm2ddl:
+          import_files_sql_extractor: org.hibernate.tool.hbm2ddl.MultipleLinesSqlCommandExtractor
     show-sql: false
-    database-platform: org.hibernate.dialect.MySQL5Dialect
+    database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
       ddl-auto: none
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+
   mail:
     host: smtp.gmail.com
     port: 587
     username: deofis.github@gmail.com
-    password: ENC(43ObyGBU+p+d7yD3/Qq9eYoVocoDxeYk)
+    password: ENC(2j2tFEz5rbsf0BcsJH4U5hw9ogYdmL3o)
     properties:
       mail:
         smtp:
@@ -36,6 +41,18 @@ amazon:
     endpoint: https://deofis-images-bucket.s3.eu-west-2.amazonaws.com/
     accessKey: ENC(6ik+s8LqW3b68c9K1eOX3yoxpeU6+LgcboZbr07ZANw=)
     secretKey: ENC(RkOXxN4A2LF+JrZGafMYlbNwY6JkcIdyPNv+vjahgcHfg0gTjm4i/fRt9SWM33RN46vY/N/50gg=)
+
+paypal:
+  clientId: AULkwIac0isgBpdaemBxUi7VABSAksciHwhnwbJHh-Och2Kf8qAJ0cwFbYrouVgA5Mqo9fHonoyof3EJ
+  clientSecret: EFoADORBnsYEkgM6YNfTU_pfHu0D8Npi2W8ZFASWysDKWnicY0OQX2sYCyCQs8H7RU9w5bnleMcUP5JP
+
+mercadopago:
+  publicKey: TEST-d0859391-4a9a-47ec-a0c1-74b6d81f7fa3
+  accessKey: TEST-1434091456534127-011920-67ef4409b41a150450c09f1fbac42aae-703836772
+
+magicbell:
+  apiKey: fe895cc2053486135913f5557c5fae1ca049a04e
+  apiSecret: c7d010e7def46aec61c8524f85371103a1e48fb0
 
 jwt:
   expirationInMillis: 900000
