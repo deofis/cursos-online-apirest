@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+
+  deofis_mysql_container:
+    image: mysql:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD=1224
+      - MYSQL_DATABASE=deofis_dev
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=1224
+    ports:
+    - 13306:3306
+
+  deofis-tienda-apirest:
+    image: neritoo/deofis-tienda-apirest:0.3.9
+    restart: on-failure
+    depends_on:
+      - deofis_mysql_container
+    ports:
+    - 8080:8080
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://deofis_mysql_container:3306/deofis_dev?autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=America/Argentina/Cordoba
