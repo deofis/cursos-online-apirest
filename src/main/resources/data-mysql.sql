@@ -1,7 +1,7 @@
-INSERT INTO `countries` (`id`, `name`, `iso3`, `iso2`, `phonecode`, `capital`, `currency`, `native`, `region`, `subregion`, `emoji`, `emojiU`, `created_at`, `updated_at`, `flag`, `wikiDataId`) VALUES
+INSERT IGNORE INTO `countries` (`id`, `name`, `iso3`, `iso2`, `phonecode`, `capital`, `currency`, `native`, `region`, `subregion`, `emoji`, `emojiU`, `created_at`, `updated_at`, `flag`, `wikiDataId`) VALUES
 (11, 'Argentina', 'ARG', 'AR', '54', 'Buenos Aires', 'ARS', 'Argentina', 'Americas', 'South America', '🇦🇷', 'U+1F1E6 U+1F1F7', '2018-07-20 20:11:03', '2020-10-25 14:35:15', 1, 'Q414'), (207, 'España', 'ESP', 'ES', '34', 'Madrid', 'EUR', 'España', 'Europe', 'Southern Europe', '🇪🇸', 'U+1F1EA U+1F1F8', '2018-07-20 20:11:03', '2020-10-25 14:35:15', 1, 'Q29');
 
-INSERT INTO `states` (`id`, `name`, `country_id`, `country_code`, `fips_code`, `iso2`, `created_at`, `updated_at`, `flag`, `wikiDataId`) VALUES
+INSERT IGNORE INTO `states` (`id`, `name`, `country_id`, `country_code`, `fips_code`, `iso2`, `created_at`, `updated_at`, `flag`, `wikiDataId`) VALUES
 (3634, 'San Juan', 11, 'AR', '18', 'J', '2019-10-05 17:48:55', '2019-10-05 17:48:55', 1, 'Q44805'),
 (3635, 'Santiago del Estero', 11, 'AR', '22', 'G', '2019-10-05 17:48:55', '2019-10-05 17:48:55', 1, 'Q44827'),
 (3636, 'San Luis', 11, 'AR', '19', 'D', '2019-10-05 17:48:55', '2019-10-05 17:48:55', 1, 'Q44818'),
@@ -27,7 +27,7 @@ INSERT INTO `states` (`id`, `name`, `country_id`, `country_code`, `fips_code`, `
 (3656, 'Buenos Aires', 11, 'AR', '07', 'B', '2019-10-05 17:48:55', '2020-08-15 16:49:24', 1, 'Q1486'),
 (4880, 'Ciudad Autónoma de Buenos Aires', 11, 'AR', NULL, 'C', '2020-08-15 16:49:48', '2020-08-15 16:51:39', 1, 'MANUAL');
 
-INSERT INTO `states` (`id`, `name`, `country_id`, `country_code`, `fips_code`, `iso2`, `created_at`, `updated_at`, `flag`, `wikiDataId`) VALUES
+INSERT IGNORE INTO `states` (`id`, `name`, `country_id`, `country_code`, `fips_code`, `iso2`, `created_at`, `updated_at`, `flag`, `wikiDataId`) VALUES
 (1193, 'Andalucia',207, 'ES', '51', 'AN', '2019-10-05 17:48:40', '2019-10-05 17:48:40',1, 'Q5783'),
 (1177, 'Aragon',207, 'ES', '52', 'AR', '2019-10-05 17:48:40', '2019-10-05 17:48:40',1, 'Q4040'),
 (1160, 'Asturias',207, 'ES', 'ML', 'O', '2019-10-05 17:48:40', '2019-10-05 17:48:40',1, 'Q24004403'),
@@ -48,7 +48,7 @@ INSERT INTO `states` (`id`, `name`, `country_id`, `country_code`, `fips_code`, `
 (1191, 'País Vasco',207, 'ES', '59', 'PV', '2019-10-05 17:48:40', '2019-10-05 17:48:40',1, 'Q3995'),
 (1176, 'Región de Murcia',207, 'ES', '31', 'MC', '2019-10-05 17:48:40', '2019-10-05 17:48:40',1, 'Q5772');
 
-INSERT INTO `cities` (`id`, `name`, `state_id`, `state_code`, `country_id`, `country_code`, `latitude`, `longitude`, `created_at`, `updated_on`, `flag`, `wikiDataId`) VALUES
+INSERT IGNORE INTO `cities` (`id`, `name`, `state_id`, `state_code`, `country_id`, `country_code`, `latitude`, `longitude`, `created_at`, `updated_on`, `flag`, `wikiDataId`) VALUES
 (637, '28 de Noviembre',3649, 'Z',11, 'AR', '-51.58390000', '-72.21382000', '2019-10-05 18:28:12', '2019-10-05 18:28:12',1, 'Q1533589'),
 (638, 'Abra Pampa',3645, 'Y',11, 'AR', '-22.72049000', '-65.69697000', '2019-10-05 18:28:12', '2019-10-05 18:28:12',1, 'Q55386'),
 (639, 'Achiras',3642, 'X',11, 'AR', '-33.17538000', '-64.99331000', '2019-10-05 18:28:12', '2019-10-05 18:28:12',1, 'Q8187413'),
@@ -1013,7 +1013,7 @@ INSERT INTO `cities` (`id`, `name`, `state_id`, `state_code`, `country_id`, `cou
 (1598, 'Zapala',3648, 'Q',11, 'AR', '-38.89916000', '-70.05442000', '2019-10-05 18:28:21', '2019-10-05 18:28:21',1, 'Q147196'),
 (1599, 'Ñorquinco',3639, 'R',11, 'AR', '-41.85072000', '-70.90173000', '2019-10-05 18:28:21', '2020-05-01 13:22:33',1, 'Q292866');
 
-INSERT INTO `cities` (`id`, `name`, `state_id`, `state_code`, `country_id`, `country_code`, `latitude`, `longitude`, `created_at`, `updated_on`, `flag`, `wikiDataId`) VALUES
+INSERT IGNORE INTO `cities` (`id`, `name`, `state_id`, `state_code`, `country_id`, `country_code`, `latitude`, `longitude`, `created_at`, `updated_on`, `flag`, `wikiDataId`) VALUES
 (31892, 'A Baña',1167, 'GA',207, 'ES', '42.96180000', '-8.75784000', '2019-10-05 18:45:32', '2020-05-01 13:23:16',1, 'Q1183411'),
 (31893, 'La Coruña',1167, 'GA',207, 'ES', '43.37135000', '-8.39600000', '2019-10-05 18:45:32', '2020-05-01 13:23:16',1, 'Q8757'),
 (31894, 'A Estrada',1167, 'GA',207, 'ES', '42.68911000', '-8.48842000', '2019-10-05 18:45:32', '2019-10-05 18:45:32',1, 'Q1621191'),

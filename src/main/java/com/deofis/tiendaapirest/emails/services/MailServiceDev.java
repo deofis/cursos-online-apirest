@@ -29,7 +29,7 @@ public class MailServiceDev implements MailService {
     public void sendEmail(NotificationEmail notificationEmail) {
         MimeMessagePreparator messagePreparator = mimeMessage -> {
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
-            messageHelper.setFrom("deofis.mailsender-598aee@inbox.mailtrap.io");
+            messageHelper.setFrom("deofis-mailsender-167bea@inbox.mailtrap.io");
             messageHelper.setTo(notificationEmail.getRecipient());
             messageHelper.setSubject(notificationEmail.getSubject());
             messageHelper.setText(mailContentBuilder.build(notificationEmail.getBody()) , true);
@@ -48,7 +48,7 @@ public class MailServiceDev implements MailService {
     public void sendEmail(NotificationEmail notificationEmail, String url) {
         MimeMessagePreparator messagePreparator = mimeMessage -> {
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
-            messageHelper.setFrom("deofis.mailsender-598aee@inbox.mailtrap.io");
+            messageHelper.setFrom("deofis-mailsender-167bea@inbox.mailtrap.io");
             messageHelper.setTo(notificationEmail.getRecipient());
             messageHelper.setSubject(notificationEmail.getSubject());
             messageHelper.setText(mailContentBuilder.build(notificationEmail.getBody(), url) , true);
