@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @AllArgsConstructor
-@Profile("dev")
+@Profile({"dev", "devdocker"})
 @Slf4j
 public class MailServiceDev implements MailService {
 
