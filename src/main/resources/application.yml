@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: qa
+    active: dev
 
   jackson:
     time-zone: America/Argentina/Cordoba
