@@ -5,6 +5,8 @@ spring:
     password: ENC(2ns5ABYULg5Mg6srSA5tefYRlkqAebbl)
     driver-class-name: com.mysql.cj.jdbc.Driver
     initialization-mode: always
+    platform: mysql
+    data: classpath:/data-mysql.sql
   jpa:
     properties:
       hibernate:
