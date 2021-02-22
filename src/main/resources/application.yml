@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: devdocker
+    active: qa
 
   jackson:
     time-zone: America/Argentina/Cordoba
