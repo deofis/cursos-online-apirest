@@ -1,8 +1,8 @@
 spring:
   datasource:
     url: jdbc:mysql://localhost:13306/deofis_dev?allowPublicKeyRetrieval=true&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=America/Argentina/Cordoba
-    username: root
-    password: 1224
+    username: dev
+    password: userdev1224
     driver-class-name: com.mysql.cj.jdbc.Driver
     initializationMode: always
     platform: mysql
