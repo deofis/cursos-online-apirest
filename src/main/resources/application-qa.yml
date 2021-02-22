@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:mysql://deofis.c0j3cq5bdbwq.eu-west-2.rds.amazonaws.com/deofis_qa
+    url: jdbc:mysql://deofis-qa.crhfvajzxctv.eu-west-2.rds.amazonaws.com/deofis_qa
     username: user_qa
     password: ENC(2ns5ABYULg5Mg6srSA5tefYRlkqAebbl)
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -32,15 +32,15 @@ spring:
             auth: true
 
 endpoints:
-  baseUrl: https://api.deofisdev.online
+  baseUrl: https://cursos.api.deofisdev.online
   clientUrl: https://wantfrom-tienda.web.app
 
 amazon:
   s3:
-    bucketName: deofis-images-bucket
-    endpoint: https://deofis-images-bucket.s3.eu-west-2.amazonaws.com/
-    accessKey: ENC(6ik+s8LqW3b68c9K1eOX3yoxpeU6+LgcboZbr07ZANw=)
-    secretKey: ENC(RkOXxN4A2LF+JrZGafMYlbNwY6JkcIdyPNv+vjahgcHfg0gTjm4i/fRt9SWM33RN46vY/N/50gg=)
+    bucketName: deofis-dev-bucket
+    endpoint: https://deofis-dev-bucket.s3.eu-west-2.amazonaws.com/
+    accessKey: ENC(fH9vySrU4xPEmDqI0m79/RqQRzrnjiOtpVDTokbfEfg=)
+    secretKey: ENC(vIxqo/d8mOUnpVDQRJlJrD8XooTw8BFBWAcnnpsix8JfWt/M3p5S7Xn08sl2jG3wQYy5GSy7PsU=)
 
 paypal:
   clientId: AULkwIac0isgBpdaemBxUi7VABSAksciHwhnwbJHh-Och2Kf8qAJ0cwFbYrouVgA5Mqo9fHonoyof3EJ
