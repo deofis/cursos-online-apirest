@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.deofis</groupId>
-    <artifactId>tienda-apirest</artifactId>
-    <version>0.3.9-SNAPSHOT</version>
-    <name>tienda-apirest</name>
-    <description>Apirest para el sistema de tienda online de Deofis.</description>
+    <artifactId>cursos-tienda-apirest</artifactId>
+    <version>0.3.8-RELEASE</version>
+    <name>cursos-tienda-apirest</name>
+    <description>Apirest para el sistema de tienda online de Deofis, para la demo de cursos.</description>
 
     <properties>
         <java.version>11</java.version>

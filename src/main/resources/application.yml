@@ -16,7 +16,7 @@ spring:
           google:
             clientId: 246683704550-b7obv7nofojifsppcs3a6lo044rg5j9b.apps.googleusercontent.com
             clientSecret: 4bJ6REwj7nPaURstmHndJcjg
-            redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
+            redirectUri: "https://cursos.api.deofisdev.online/oauth2/callback/{registrationId}"
             scope:
               - email
               - profile
@@ -47,7 +47,6 @@ app:
   oauth2:
     authorizedRedirectUris:
       - http://localhost:4200/oauth2/redirect
-      - https://tienda-frontend.web.app/oauth2/redirect
       - https://wantfrom-tienda.web.app/oauth2/redirect
       - https://deofisdev.online/oauth2/redirect
 
