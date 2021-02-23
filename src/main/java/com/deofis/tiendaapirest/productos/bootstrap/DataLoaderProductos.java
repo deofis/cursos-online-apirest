@@ -5,7 +5,6 @@ import com.deofis.tiendaapirest.productos.exceptions.ProductoException;
 import com.deofis.tiendaapirest.productos.repositories.*;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Profile;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
 
@@ -15,7 +14,6 @@ import java.util.List;
 
 @Component
 @AllArgsConstructor
-@Profile({"qa", "qaheroku", "dev", "devdocker"})
 public class DataLoaderProductos implements CommandLineRunner {
 
     private final UnidadMedidaRepository unidadMedidaRepository;
@@ -43,209 +41,39 @@ public class DataLoaderProductos implements CommandLineRunner {
         if (this.marcaRepository.findAll().size() == 0) {
             List<Marca> marcas = new ArrayList<>();
 
-            Marca puma = Marca.builder().nombre("Puma").build();
-            marcas.add(puma);
-
-            Marca topper = Marca.builder().nombre("Topper").build();
-            marcas.add(topper);
-
-            Marca jaguar = Marca.builder().nombre("Jaguar").build();
-            marcas.add(jaguar);
-
-            Marca jFoos = Marca.builder().nombre("John Foos").build();
-            marcas.add(jFoos);
-
-            Marca converse = Marca.builder().nombre("Converse").build();
-            marcas.add(converse);
-
-            Marca adidas = Marca.builder().nombre("Adidas").build();
-            marcas.add(adidas);
-
-            Marca nike = Marca.builder().nombre("Nike").build();
-            marcas.add(nike);
+            Marca escuelaLATAM = Marca.builder().nombre("Escuela LATAM").build();
+            marcas.add(escuelaLATAM);
 
             this.marcaRepository.saveAll(marcas);
         }
 
-        // Creación de propiedades y valores previo a la carga de prods y
-        // subcategorias
-
-        // Colores
-        PropiedadProducto color = PropiedadProducto.builder()
-                .nombre("Color").variable(true).valores(new ArrayList<>()).build();
-        ValorPropiedadProducto blanco = ValorPropiedadProducto.builder()
-                .valor("Blanco").build();
-        ValorPropiedadProducto negro = ValorPropiedadProducto.builder()
-                .valor("Negro").build();
-        ValorPropiedadProducto amarillo = ValorPropiedadProducto.builder()
-                .valor("Amarillo").build();
-        ValorPropiedadProducto gris = ValorPropiedadProducto.builder()
-                .valor("Gris").build();
-        ValorPropiedadProducto rojo = ValorPropiedadProducto.builder()
-                .valor("Rojo").build();
-        color.getValores().add(blanco);
-        color.getValores().add(negro);
-        color.getValores().add(amarillo);
-        color.getValores().add(gris);
-        color.getValores().add(rojo);
-
-        // Talles
-        PropiedadProducto talle = PropiedadProducto.builder()
-                .nombre("Talle").variable(true).valores(new ArrayList<>()).build();
-        ValorPropiedadProducto eu36 = ValorPropiedadProducto.builder()
-                .valor("36 EU").build();
-        ValorPropiedadProducto eu37 = ValorPropiedadProducto.builder()
-                .valor("37 EU").build();
-        ValorPropiedadProducto eu38 = ValorPropiedadProducto.builder()
-                .valor("38 EU").build();
-        ValorPropiedadProducto eu39 = ValorPropiedadProducto.builder()
-                .valor("39 EU").build();
-        talle.getValores().add(eu36);
-        talle.getValores().add(eu37);
-        talle.getValores().add(eu38);
-        talle.getValores().add(eu39);
-
         // Carga de categorías y subcategorías
-
         if (this.categoriaRepository.findAll().size() == 0) {
             // Listado de subcategorias
-            Subcategoria tenisH = Subcategoria.builder()
-                    .nombre("Tenis").codigo("TEN").propiedades(new ArrayList<>()).build();
-            tenisH.getPropiedades().add(color);
-            tenisH.getPropiedades().add(talle);
+            List<Subcategoria> subcategorias = new ArrayList<>();
+            Subcategoria idiomas = Subcategoria.builder()
+                    .nombre("Idiomas").codigo("IDI").propiedades(new ArrayList<>()).build();
+            subcategorias.add(idiomas);
 
-            Subcategoria tenisM = Subcategoria.builder()
-                    .nombre("Tenis").codigo("TEN").propiedades(new ArrayList<>()).build();
-            tenisM.getPropiedades().add(color);
-            tenisM.getPropiedades().add(talle);
+            Subcategoria talleres = Subcategoria.builder()
+                    .nombre("Talleres").codigo("TAL").propiedades(new ArrayList<>()).build();
+            subcategorias.add(talleres);
 
-            Subcategoria tenisN = Subcategoria.builder()
-                    .nombre("Tenis").codigo("TEN").propiedades(new ArrayList<>()).build();
-            tenisN.getPropiedades().add(color);
-            tenisN.getPropiedades().add(talle);
+            Subcategoria seguridad = Subcategoria.builder()
+                    .nombre("Seguridad").codigo("SEG").propiedades(new ArrayList<>()).build();
+            subcategorias.add(seguridad);
 
-            Subcategoria deportivoH = Subcategoria.builder()
-                    .nombre("Deportivo").codigo("DEP").propiedades(new ArrayList<>()).build();
-            deportivoH.getPropiedades().add(color);
-            deportivoH.getPropiedades().add(talle);
-
-            Subcategoria deportivoM = Subcategoria.builder()
-                    .nombre("Deportivo").codigo("DEP").propiedades(new ArrayList<>()).build();
-            deportivoM.getPropiedades().add(color);
-            deportivoM.getPropiedades().add(talle);
-
-            Subcategoria deportivoN = Subcategoria.builder()
-                    .nombre("Deportivo").codigo("DEP").propiedades(new ArrayList<>()).build();
-            deportivoN.getPropiedades().add(color);
-            deportivoN.getPropiedades().add(talle);
-
-            Subcategoria botasH = Subcategoria.builder()
-                    .nombre("Botas").codigo("BOT").propiedades(new ArrayList<>()).build();
-            botasH.getPropiedades().add(color);
-            botasH.getPropiedades().add(talle);
-
-            Subcategoria botasM = Subcategoria.builder()
-                    .nombre("Botas").codigo("BOT").propiedades(new ArrayList<>()).build();
-            botasM.getPropiedades().add(color);
-            botasM.getPropiedades().add(talle);
-
-            Subcategoria calzadoTrabajoH = Subcategoria.builder()
-                    .nombre("Calzado de trabajo").codigo("TRA").propiedades(new ArrayList<>()).build();
-            calzadoTrabajoH.getPropiedades().add(color);
-            calzadoTrabajoH.getPropiedades().add(talle);
-
-            Subcategoria calzadoTrabajoM = Subcategoria.builder()
-                    .nombre("Calzado de trabajo").codigo("TRA").propiedades(new ArrayList<>()).build();
-            calzadoTrabajoM.getPropiedades().add(color);
-            calzadoTrabajoM.getPropiedades().add(talle);
-
-            Subcategoria zapatosH = Subcategoria.builder()
-                    .nombre("Zapatos").codigo("ZAP").propiedades(new ArrayList<>()).build();
-            zapatosH.getPropiedades().add(color);
-            zapatosH.getPropiedades().add(talle);
-
-            Subcategoria zapatosM = Subcategoria.builder()
-                    .nombre("Zapatos").codigo("ZAP").propiedades(new ArrayList<>()).build();
-            zapatosM.getPropiedades().add(color);
-            zapatosM.getPropiedades().add(talle);
-
-            Subcategoria zapatosN = Subcategoria.builder()
-                    .nombre("Zapatos").codigo("ZAP").propiedades(new ArrayList<>()).build();
-            zapatosN.getPropiedades().add(color);
-            zapatosN.getPropiedades().add(talle);
-
-            Subcategoria mocasines = Subcategoria.builder()
-                    .nombre("Mocasines").codigo("MOC").propiedades(new ArrayList<>()).build();
-            mocasines.getPropiedades().add(color);
-            mocasines.getPropiedades().add(talle);
-
-            Subcategoria sandaliasH = Subcategoria.builder()
-                    .nombre("Sandalias").codigo("SAN").propiedades(new ArrayList<>()).build();
-            sandaliasH.getPropiedades().add(color);
-            sandaliasH.getPropiedades().add(talle);
-
-            Subcategoria sandaliasM = Subcategoria.builder()
-                    .nombre("Sandalias").codigo("SAN").propiedades(new ArrayList<>()).build();
-            sandaliasM.getPropiedades().add(color);
-            sandaliasM.getPropiedades().add(talle);
-
-            Subcategoria sandaliasN = Subcategoria.builder()
-                    .nombre("Sandalias").codigo("SAN").propiedades(new ArrayList<>()).build();
-            sandaliasN.getPropiedades().add(color);
-            sandaliasN.getPropiedades().add(talle);
-
-            Subcategoria crocsH = Subcategoria.builder()
-                    .nombre("Crocs").codigo("CRO").propiedades(new ArrayList<>()).build();
-            crocsH.getPropiedades().add(color);
-            crocsH.getPropiedades().add(talle);
-
-            Subcategoria crocsM = Subcategoria.builder()
-                    .nombre("Crocs").codigo("CRO").propiedades(new ArrayList<>()).build();
-            crocsM.getPropiedades().add(color);
-            crocsM.getPropiedades().add(talle);
-
-            Subcategoria crocsN = Subcategoria.builder()
-                    .nombre("Crocs").codigo("CRO").propiedades(new ArrayList<>()).build();
-            crocsN.getPropiedades().add(color);
-            crocsN.getPropiedades().add(talle);
+            Subcategoria turismo = Subcategoria.builder()
+                    .nombre("Turismo").codigo("TUR").propiedades(new ArrayList<>()).build();
+            subcategorias.add(turismo);
 
             // Listado de categorias
-            List<Categoria> categorias = new ArrayList<>();
-
-            Categoria hombre = Categoria.builder()
-                    .nombre("Hombre").subcategorias(new ArrayList<>()).build();
-            hombre.getSubcategorias().add(tenisH);
-            hombre.getSubcategorias().add(deportivoH);
-            hombre.getSubcategorias().add(botasH);
-            hombre.getSubcategorias().add(calzadoTrabajoH);
-            hombre.getSubcategorias().add(zapatosH);
-            hombre.getSubcategorias().add(mocasines);
-            hombre.getSubcategorias().add(sandaliasH);
-            hombre.getSubcategorias().add(crocsH);
-            categorias.add(hombre);
-
-            Categoria mujer = Categoria.builder()
-                    .nombre("Mujer").subcategorias(new ArrayList<>()).build();
-            mujer.getSubcategorias().add(tenisM);
-            mujer.getSubcategorias().add(deportivoM);
-            mujer.getSubcategorias().add(botasM);
-            mujer.getSubcategorias().add(calzadoTrabajoM);
-            mujer.getSubcategorias().add(zapatosM);
-            mujer.getSubcategorias().add(sandaliasM);
-            mujer.getSubcategorias().add(crocsM);
-            categorias.add(mujer);
-
-            Categoria ninos = Categoria.builder()
-                    .nombre("Niños").subcategorias(new ArrayList<>()).build();
-            ninos.getSubcategorias().add(tenisN);
-            ninos.getSubcategorias().add(deportivoN);
-            ninos.getSubcategorias().add(zapatosN);
-            ninos.getSubcategorias().add(sandaliasN);
-            ninos.getSubcategorias().add(crocsN);
-            categorias.add(ninos);
+            Categoria cursos = Categoria.builder()
+                    .nombre("Cursos").subcategorias(new ArrayList<>()).build();
+            cursos.getSubcategorias().addAll(subcategorias);
 
             // Guardar categorias y subcategorias
-            this.categoriaRepository.saveAll(categorias);
+            this.categoriaRepository.save(cursos);
         }
 
         // Carga de productos
@@ -254,13 +82,63 @@ public class DataLoaderProductos implements CommandLineRunner {
             // Listado de productos
             List<Producto> productos = new ArrayList<>();
 
-            Producto pumaStorm = Producto.builder()
-                    .nombre("Tenis Puma Storm Mesh")
-                    .descripcion("Conquista el mundo con estas deslumbrantes tenis de verano. Un diseño dinámico" +
-                            " inspirado en formas naturales que se combina con una parte superior de malla y una" +
-                            " entresuela de EVA moldeada por compresión para un verano liviano con" +
-                            " impacto visual.")
-                    .precio(67.99)
+            Producto tripulacionCruceros = Producto.builder()
+                    .nombre("Tripulación de Cruceros")
+                    .descripcion("Una gran capacitación, para aprender todo lo necesario para calificar y trabajar en Cruceros.\n" +
+                            "\n" +
+                            "La principal finalidad del curso es la de capacitar al alumno para que pueda conocer en profundidad, con detalles, las prestaciones de Cruceros, su forma de trabajo, como armar su curriculum, calificar, y poder Trabajar en un Crucero.\n" +
+                            "\n" +
+                            "Otorga una profunda capacitación y amplia los conocimientos del turismo en Cruceros, ya que está dictado por los mejores profesionales del Rubro.\n" +
+                            "\n" +
+                            "Título: Auxiliar Tripulante de Cruceros\n" +
+                            "\n" +
+                            "CUPOS LIMITADOS❗\n" +
+                            "DURACION DE LA CAPACITACION:\n" +
+                            "\n" +
+                            "– CLASE DE INTRODUCCION DE 1 HORA Y MEDIA\n" +
+                            "\n" +
+                            "– 4 CLASES DE 2hs CADA UNA + Bonus Track Devoluciones\n" +
+                            "\n" +
+                            "Total, 12hs de Capacitación / Cursados días Miércoles de 19hs a 21hs\n" +
+                            "\n" +
+                            "MODALIDAD: Online Vía Zoom")
+                    .precio(9000.00)
+                    .disponibilidadGeneral(50)
+                    .foto(null)
+                    .imagenes(new ArrayList<>())
+                    .activo(true)
+                    .destacado(true)
+                    .fechaCreacion(new Date())
+                    .subcategoria(this.subcategoriaRepository.getOne(4L))
+                    .marca(this.marcaRepository.getOne(1L))
+                    .unidadMedida(this.unidadMedidaRepository.getOne(1L))
+                    .propiedades(new ArrayList<>())
+                    .skus(new ArrayList<>()).build();
+
+            tripulacionCruceros.setDefaultSku(Sku.builder()
+                    .nombre(tripulacionCruceros.getNombre())
+                    .descripcion(tripulacionCruceros.getDescripcion())
+                    .fechaCreacion(tripulacionCruceros.getFechaCreacion())
+                    .precio(tripulacionCruceros.getPrecio())
+                    .disponibilidad(tripulacionCruceros.getDisponibilidadGeneral())
+                    .defaultProducto(tripulacionCruceros).build());
+            productos.add(tripulacionCruceros);
+
+            Producto portugues = Producto.builder()
+                    .nombre("Portugés Turístico")
+                    .descripcion("Enfocados en capacitar efectivamente, conseguimos que nuestros estudiantes se " +
+                            "desenvuelvan naturalmente en el extranjero, logrando que inicien y finalicen una conversación fluida.\n" +
+                            "\n" +
+                            "El participante entrena variables necesarias en diálogos, canciones, escritos y diversas situaciones que se " +
+                            "presentan en los viajes, como por ejemplo al momento de ubicarse en un lugar, comunicarse al llegar a un hotel," +
+                            "manejarse en aeropuertos, solicitar un pedido en restaurantes, o bien visitar un banco para realizar un trámite. " +
+                            "Estas y muchas situaciones que atravesamos viajando, podrán disfrutarse mucho más y así mejorar la condición del " +
+                            "viajero en el extranjero.\n" +
+                            "CANTIDAD DE CLASES: 16 clases + 1 MasterClass Introductoria: Miércoles 6 de enero 19 hs. (Sin cargo)\n" +
+                            "DÍAS DE CURSADO: Lunes y Miércoles de 19:00 a 21:00 hs.\n" +
+                            "INICIA: Lunes 18 de Marzo de 2021 de 19:00hs a 21:00hs.\n" +
+                            "MODALIDAD: Online Vía Zoom")
+                    .precio(6500.00)
                     .disponibilidadGeneral(50)
                     .foto(null)
                     .imagenes(new ArrayList<>())
@@ -272,152 +150,75 @@ public class DataLoaderProductos implements CommandLineRunner {
                     .unidadMedida(this.unidadMedidaRepository.getOne(1L))
                     .propiedades(new ArrayList<>())
                     .skus(new ArrayList<>()).build();
-            pumaStorm.getPropiedades().add(color);
-            pumaStorm.getPropiedades().add(talle);
-            pumaStorm.setDefaultSku(Sku.builder()
-                    .nombre(pumaStorm.getNombre())
-                    .descripcion(pumaStorm.getDescripcion())
-                    .fechaCreacion(pumaStorm.getFechaCreacion())
-                    .precio(pumaStorm.getPrecio())
-                    .disponibilidad(pumaStorm.getDisponibilidadGeneral())
-                    .defaultProducto(pumaStorm).build());
-            productos.add(pumaStorm);
 
-            Producto pumaFlyer = Producto.builder()
-                    .nombre("Tenis Deportivos Puma Flyer Runner")
-                    .descripcion("Deportivos especiales para hacer running en tus tardes libres. Disfrute" +
-                            " del calzado deportivo de punta de una marca reconocida como es Puma.")
-                    .precio(57.99)
-                    .disponibilidadGeneral(29)
-                    .foto(null)
-                    .imagenes(new ArrayList<>())
-                    .activo(true)
-                    .destacado(false)
-                    .fechaCreacion(new Date())
-                    .subcategoria(this.subcategoriaRepository.getOne(4L))
-                    .marca(this.marcaRepository.getOne(1L))
-                    .unidadMedida(this.unidadMedidaRepository.getOne(1L))
-                    .propiedades(new ArrayList<>())
-                    .skus(new ArrayList<>()).build();
-            pumaFlyer.getPropiedades().add(color);
-            pumaFlyer.getPropiedades().add(talle);
-            pumaFlyer.setDefaultSku(Sku.builder()
-                    .nombre(pumaFlyer.getNombre())
-                    .descripcion(pumaFlyer.getDescripcion())
-                    .precio(pumaFlyer.getPrecio())
-                    .fechaCreacion(pumaFlyer.getFechaCreacion())
-                    .disponibilidad(pumaFlyer.getDisponibilidadGeneral())
-                    .defaultProducto(pumaFlyer).build());
-            productos.add(pumaFlyer);
+            portugues.setDefaultSku(Sku.builder()
+                    .nombre(portugues.getNombre())
+                    .descripcion(portugues.getDescripcion())
+                    .fechaCreacion(portugues.getFechaCreacion())
+                    .precio(portugues.getPrecio())
+                    .disponibilidad(portugues.getDisponibilidadGeneral())
+                    .defaultProducto(portugues).build());
+            productos.add(portugues);
 
-            Producto pumaBasket = Producto.builder()
-                    .nombre("Bota Puma Basket Fierce")
-                    .descripcion("Bota puma basket fierce moda urbano")
-                    .precio(47.99)
-                    .disponibilidadGeneral(49)
+            Producto covid19 = Producto.builder()
+                    .nombre("Seguridad Covid-19 en Turismo")
+                    .descripcion("En este entrenamiento podrás conocer de manera sencilla todos los sistemas basados en " +
+                            "Metodología Suiza, en protocolos que se realizan en el marco de las acciones de prevención " +
+                            "para evitar la propagación del Covid-19 en Turismo en Estados Unidos.\n" +
+                            "CANTIDAD DE CLASES: 8 Encuentros de 2 horas\n" +
+                            "DÍAS DE CURSADO: Martes y Jueves de 14 a 16 hs.\n" +
+                            "PRÓXIMA EDICIÓN: 17 de Marzo" +
+                            "MODALIDAD: Online Vía Zoom")
+                    .precio(5000.00)
+                    .disponibilidadGeneral(50)
                     .foto(null)
                     .imagenes(new ArrayList<>())
                     .activo(true)
                     .destacado(true)
                     .fechaCreacion(new Date())
-                    .subcategoria(this.subcategoriaRepository.getOne(7L))
+                    .subcategoria(this.subcategoriaRepository.getOne(3L))
                     .marca(this.marcaRepository.getOne(1L))
                     .unidadMedida(this.unidadMedidaRepository.getOne(1L))
                     .propiedades(new ArrayList<>())
                     .skus(new ArrayList<>()).build();
-            pumaBasket.getPropiedades().add(color);
-            pumaBasket.getPropiedades().add(talle);
-            pumaBasket.setDefaultSku(Sku.builder()
-                    .nombre(pumaBasket.getNombre())
-                    .descripcion(pumaBasket.getDescripcion())
-                    .precio(pumaBasket.getPrecio())
-                    .fechaCreacion(pumaBasket.getFechaCreacion())
-                    .disponibilidad(pumaBasket.getDisponibilidadGeneral())
-                    .defaultProducto(pumaBasket).build());
-            productos.add(pumaBasket);
 
-            Producto topperCapitan = Producto.builder()
-                    .nombre("Tenis Topper Capitán")
-                    .descripcion("Ideales para tu look urbano, cool y atemporal." +
-                            " Un clásico de Topper para todos los nostálgicos")
-                    .precio(43.00)
-                    .disponibilidadGeneral(49)
+            covid19.setDefaultSku(Sku.builder()
+                    .nombre(covid19.getNombre())
+                    .descripcion(covid19.getDescripcion())
+                    .fechaCreacion(covid19.getFechaCreacion())
+                    .precio(covid19.getPrecio())
+                    .disponibilidad(covid19.getDisponibilidadGeneral())
+                    .defaultProducto(covid19).build());
+            productos.add(covid19);
+
+            Producto turismoEstudiantil = Producto.builder()
+                    .nombre("Taller Integral de Turismo Estudiantil")
+                    .descripcion("Iniciamos a todos los interesados en los Conocimientos profesionales, éticos y técnicos " +
+                            "para desarrollar cualquier tipo de productos para turismo Estudiantil primario, secundario " +
+                            "o educativo, observado desde todos los lugares donde se puedan desempeñar. Promoción, " +
+                            "supervisión, jefe de zona, gerente, administración, coordinación y coordinación general de hotel\n." +
+                            "\nInscripciones Próximamente.")
+                    .precio(6000.00)
+                    .disponibilidadGeneral(50)
                     .foto(null)
                     .imagenes(new ArrayList<>())
                     .activo(true)
                     .destacado(true)
                     .fechaCreacion(new Date())
                     .subcategoria(this.subcategoriaRepository.getOne(2L))
-                    .marca(this.marcaRepository.getOne(2L))
+                    .marca(this.marcaRepository.getOne(1L))
                     .unidadMedida(this.unidadMedidaRepository.getOne(1L))
                     .propiedades(new ArrayList<>())
                     .skus(new ArrayList<>()).build();
-            topperCapitan.getPropiedades().add(color);
-            topperCapitan.getPropiedades().add(talle);
-            topperCapitan.setDefaultSku(Sku.builder()
-                    .nombre(topperCapitan.getNombre())
-                    .descripcion(topperCapitan.getDescripcion())
-                    .precio(topperCapitan.getPrecio())
-                    .fechaCreacion(topperCapitan.getFechaCreacion())
-                    .disponibilidad(topperCapitan.getDisponibilidadGeneral())
-                    .defaultProducto(topperCapitan).build());
-            productos.add(topperCapitan);
 
-            Producto topperUltralight = Producto.builder()
-                    .nombre("Tenis Deportivos Topper Ultralight")
-                    .descripcion("")
-                    .precio(38.99)
-                    .disponibilidadGeneral(25)
-                    .foto(null)
-                    .imagenes(new ArrayList<>())
-                    .activo(true)
-                    .destacado(true)
-                    .subcategoria(this.subcategoriaRepository.getOne(5L))
-                    .marca(this.marcaRepository.getOne(2L))
-                    .unidadMedida(this.unidadMedidaRepository.getOne(1L))
-                    .propiedades(new ArrayList<>())
-                    .skus(new ArrayList<>()).build();
-            topperUltralight.getPropiedades().add(color);
-            topperUltralight.getPropiedades().add(talle);
-            topperUltralight.setDefaultSku(Sku.builder()
-                    .nombre(topperUltralight.getNombre())
-                    .descripcion(topperUltralight.getDescripcion())
-                    .precio(topperUltralight.getPrecio())
-                    .fechaCreacion(topperUltralight.getFechaCreacion())
-                    .disponibilidad(topperUltralight.getDisponibilidadGeneral())
-                    .defaultProducto(topperUltralight).build());
-            productos.add(topperUltralight);
-
-            Producto adidasRunfalcon = Producto.builder()
-                    .nombre("Tenis deportivos Adidas Runfalcon")
-                    .descripcion("Capellada elaborada en malla textil con refuerzos de piel sintética. La construcción" +
-                            " no presenta costuras en el upper, para que puedas notar una gran sensación de confort en" +
-                            " todo el pie. Ligera entresuela de EVA, para aportar una amortiguación sencilla y" +
-                            " efectiva, reduciendo el peso del calzado y consiguiendo una pisada confortable." +
-                            " Suela exterior de goma que presenta un patrón con ranuras situadas de forma estratégica" +
-                            " con las que se mejora la flexibilidad del calzado.")
-                    .precio(62.00)
-                    .disponibilidadGeneral(25)
-                    .foto(null)
-                    .imagenes(new ArrayList<>())
-                    .activo(true)
-                    .destacado(true)
-                    .fechaCreacion(new Date())
-                    .subcategoria(this.subcategoriaRepository.getOne(4L))
-                    .marca(this.marcaRepository.getOne(6L))
-                    .unidadMedida(this.unidadMedidaRepository.getOne(1L))
-                    .propiedades(new ArrayList<>())
-                    .skus(new ArrayList<>()).build();
-            adidasRunfalcon.getPropiedades().add(color);
-            adidasRunfalcon.getPropiedades().add(talle);
-            adidasRunfalcon.setDefaultSku(Sku.builder()
-                    .nombre(adidasRunfalcon.getNombre())
-                    .descripcion(adidasRunfalcon.getDescripcion())
-                    .precio(adidasRunfalcon.getPrecio())
-                    .fechaCreacion(adidasRunfalcon.getFechaCreacion())
-                    .disponibilidad(adidasRunfalcon.getDisponibilidadGeneral())
-                    .defaultProducto(adidasRunfalcon).build());
-            productos.add(adidasRunfalcon);
+            turismoEstudiantil.setDefaultSku(Sku.builder()
+                    .nombre(turismoEstudiantil.getNombre())
+                    .descripcion(turismoEstudiantil.getDescripcion())
+                    .fechaCreacion(turismoEstudiantil.getFechaCreacion())
+                    .precio(turismoEstudiantil.getPrecio())
+                    .disponibilidad(turismoEstudiantil.getDisponibilidadGeneral())
+                    .defaultProducto(turismoEstudiantil).build());
+            productos.add(turismoEstudiantil);
 
             // Guardamos los productos y sus skus por defecto
             this.productoRepository.saveAll(productos);
